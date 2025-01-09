@@ -1,4 +1,3 @@
-const { exec } = require('child_process');
 const figlet = require('figlet');
 const peq = require("../package.json");
 
@@ -115,12 +114,12 @@ async function start() {
 
           });
 
-          setTimeout(async() => {
+          setTimeout(async () => {
             await setActivity();
 
-          setInterval(async () => {
-            await setActivity();
-          }, 15000);
+            setInterval(async () => {
+              await setActivity();
+            }, 15000);
           }, 1500)
         }
       }, 0);

@@ -27,11 +27,13 @@ let currentClients = {};
 let isMinecraftRunning = false;
 let tlAuth = false
 
-const detectMinecraftClients = async () => {
+const detectMinecraftClients = () => {
     const { exec } = require('child_process');
 
     return new Promise((resolve, reject) => {
+
         exec('tasklist', (error, stdout, stderr) => {
+
             if (error || stderr) {
                 return reject('Erro ao listar processos:', error || stderr);
             }
@@ -69,14 +71,13 @@ const detectMinecraftClients = async () => {
             });
 
             const isMinecraftOpen = stdout.includes('javaw.exe');
+
             if (!stdout.includes("java.exe")) isMinecraftRunning = isMinecraftOpen;
             if (isMinecraftOpen) {
-                if (tlAuth === true) return;
-                console.log('[DEBUG] - Minecraft foi aberto!');
+                if (tlAuth !== true) console.log('[DEBUG] - Minecraft foi aberto!');
                 tlAuth = true;
             } else {
-                if (tlAuth === false) return;
-                console.log('[DEBUG] - Minecraft foi fechado!');
+                if (tlAuth !== false) console.log('[DEBUG] - Minecraft foi fechado!');
                 tlAuth = false;
             }
 
@@ -88,11 +89,8 @@ const detectMinecraftClients = async () => {
 module.exports.presence = async (nick) => {
     try {
         const clients = await detectMinecraftClients();
-
         const response = await fetch('https://api.mcsrvstat.us/3/redesky.net');
-
         if (response.status === 200) {
-
             const data = await response.json();
             presence.config.state = `ip: redesky.net${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
             presence.config.details = data.motd ? data.motd.clean[0] : "Servidor Offline 🔴.";

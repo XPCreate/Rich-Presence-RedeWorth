@@ -1,6 +1,6 @@
 {
   "name": "custom-discord-status",
-  "version": "1.7.5",
+  "version": "1.7.7",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -8,14 +8,16 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "custom-discord-status": "file:",
     "discord-rpc": "^4.0.1",
     "figlet": "^1.8.0",
+    "node-fetch": "^3.3.2",
     "ps-list": "^8.1.1"
   },
   "devDependencies": {
     "@types/discord-rpc": "^4.0.8"
   }
 }
+  
