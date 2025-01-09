@@ -27,7 +27,7 @@ let currentClients = {};
 let isMinecraftRunning = false;
 let tlAuth = false
 
-const detectMinecraftClients = () => {
+const detectMinecraftClients = async () => {
     const { exec } = require('child_process');
 
     return new Promise((resolve, reject) => {
@@ -87,7 +87,7 @@ const detectMinecraftClients = () => {
 
 module.exports.presence = async (nick) => {
     try {
-        const clients = detectMinecraftClients();
+        const clients = await detectMinecraftClients();
 
         const response = await fetch('https://api.mcsrvstat.us/3/redesky.net');
 

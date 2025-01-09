@@ -19,7 +19,7 @@ figlet('vitor_xp', (err, data) => {
   console.clear("")
 
   if (err) {
-    console.log('Algo deu errado...');
+    console.log('Algo deu errado...', err);
     return;
   }
 
@@ -27,7 +27,7 @@ figlet('vitor_xp', (err, data) => {
 
   const textoPequeno = "Criado por:";
   const textoPequenoMais = "Para a Rede Worth no intuito de divulgar o servidor no discord.";
-  const textoVersao = "Versão: " + peq.version + " - Editado: 05/01/2025";
+  const textoVersao = "Versão: " + peq.version + " - Editado: 09/01/2025";
 
   console.log(`
 \x1b[0;37m---------------------------------------------------------------\x1b[0m
@@ -73,13 +73,7 @@ async function start() {
     RPC.on('ready', async () => {
       console.log('[DEBUG] - Ativado sistema...')
 
-      await setActivity();
-      
-      setInterval(async () => {
-        await setActivity();
-      }, 15000);
-
-      var adsdf = setInterval(() => {
+      var adsdf = setInterval(async () => {
         if (RPC) {
           clearInterval(adsdf);
           console.log("[DEBUG] - Sistema ativo, conexão conectado com o Discord.")
@@ -88,8 +82,14 @@ async function start() {
             nickName = a;
             console.log(`O nick mostrado no status será: ${nickName}.`)
             process.stdin.pause();
-    
+
           });
+
+          await setActivity();
+
+          setInterval(async () => {
+            await setActivity();
+          }, 15000);
         }
       }, 0);
     });
@@ -107,4 +107,3 @@ async function start() {
     console.log(err)
   }
 }
-
