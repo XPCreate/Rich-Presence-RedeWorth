@@ -1,5 +1,33 @@
+const { exec } = require('child_process');
 const figlet = require('figlet');
 const peq = require("../package.json");
+
+async function verificarAtualizarVersao() {
+  try {
+    const response = await fetch("https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest");
+    if (!response.ok) {
+      throw new Error(`GitHub API Error: ${response.statusText} (status: ${response.status})`);
+    }
+
+    const data = await response.json();
+
+    if (!data.tag_name) {
+      throw new Error("Nenhuma release encontrada no repositório do GitHub.");
+    }
+
+    const versaoMaisRecente = data.tag_name;
+    const versaoLocal = `v${peq.version}`;
+
+    if (versaoLocal !== versaoMaisRecente) {
+      console.log(`\x1b[0;33m[AVISO] Uma nova versão está disponível: ${versaoMaisRecente}.\x1b[0m`);
+    } else {
+      console.log("\x1b[0;32m[SUCCESSO] Você já está utilizando a versão mais recente.\x1b[0m");
+    }
+  } catch (err) {
+    console.log("\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m");
+    console.error(err);
+  }
+}
 
 var discordIsNotLog = false;
 
@@ -15,8 +43,9 @@ function centralizarTexto(texto, largura) {
   }).join('\n');
 }
 
-figlet('vitor_xp', (err, data) => {
+figlet('vitor_xp', async (err, data) => {
   console.clear("")
+  await verificarAtualizarVersao();
 
   if (err) {
     console.log('Algo deu errado...', err);
@@ -43,7 +72,7 @@ figlet('vitor_xp', (err, data) => {
 
 setTimeout(async () => {
   start();
-})
+}, 2000)
 
 var nickName = null;
 
@@ -78,18 +107,21 @@ async function start() {
           clearInterval(adsdf);
           console.log("[DEBUG] - Sistema ativo, conexão conectado com o Discord.")
           console.log("[DEBUG] - Atividade personalizada ativada com sucesso! (reload a cada 15s)")
-          customLog('Qual seu nick no Minecraft?', (a) => {
+          customLog(`Qual seu nick no Minecraft?
+`, (a) => {
             nickName = a;
             console.log(`O nick mostrado no status será: ${nickName}.`)
             process.stdin.pause();
 
           });
 
-          await setActivity();
+          setTimeout(async() => {
+            await setActivity();
 
           setInterval(async () => {
             await setActivity();
           }, 15000);
+          }, 1500)
         }
       }, 0);
     });
