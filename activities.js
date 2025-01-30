@@ -1,7 +1,7 @@
 const presence = {
     config: {
         details: 'Servidor Offline 🔴',
-        state: 'ip: redesky.net',
+        state: 'ip: redeworth.com',
         startTimestamp: Date.now(),
         largeImageKey: 'logo',
         largeImageText: '⭐ Venha fazer parte da Rede Worth você também ⭐',
@@ -13,11 +13,11 @@ const presence = {
         buttons: [
             {
                 label: '🟢 Conectar',
-                url: 'minecraft://redesky.net:255565',
+                url: 'minecraft://redeworth.com:255565',
             },
             {
                 label: "Discord",
-                url:"https://discord.gg/WhA7CFcENT"
+                url:"https://discord.gg/ezphhH9BKj"
             }
         ],
     },
@@ -92,12 +92,15 @@ module.exports.presence = async (nick) => {
         const response = await fetch('https://api.mcsrvstat.us/3/redesky.net');
         if (response.status === 200) {
             const data = await response.json();
-            presence.config.state = `ip: redesky.net${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
+            presence.config.state = `ip: redeworth.com${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
             presence.config.details = data.motd ? data.motd.clean[0] : "Servidor Offline 🔴.";
             presence.config.partySize = data.motd ? data.players.online / 2 : 0;
             presence.config.partyMax = data.motd ? data.players.max : 0;
 
-            if (nick) {
+            if (String(nick) === "vitorxp") {
+                presence.config.smallImageKey = "vitorxp";
+                presence.config.smallImageText = nick;
+            } else {
                 presence.config.smallImageKey = "usernick";
                 presence.config.smallImageText = nick;
             }
