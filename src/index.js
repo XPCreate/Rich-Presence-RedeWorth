@@ -5,7 +5,7 @@ async function verificarAtualizarVersao() {
   try {
     const response = await fetch("https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest");
     if (!response.ok) {
-      throw new Error(`GitHub API Error: ${response.statusText} (status: ${response.status})`);
+      return console.error("\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m")
     }
 
     const data = await response.json();
@@ -23,8 +23,7 @@ async function verificarAtualizarVersao() {
       console.log("\x1b[0;32m[SUCCESSO] Você já está utilizando a versão mais recente.\x1b[0m");
     }
   } catch (err) {
-    console.log("\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m");
-    console.error(err);
+    console.error("\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m");
   }
 }
 
@@ -130,6 +129,7 @@ async function start() {
         discordIsNotLog = false;
       })
       .catch(async err => {
+        console.error(err);
         if (discordIsNotLog === false) console.log("[DEBUG] - Discord desconectado, reconectando...");
         discordIsNotLog = true;
         await start();

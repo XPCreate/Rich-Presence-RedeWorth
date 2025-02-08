@@ -13,11 +13,11 @@ const presence = {
         buttons: [
             {
                 label: '🟢 Conectar',
-                url: 'minecraft://redeworth.com:255565',
+                url: 'minecraft://redeworth.com:25565',
             },
             {
                 label: "Discord",
-                url:"https://discord.gg/ezphhH9BKj"
+                url: "https://discord.gg/ezphhH9BKj"
             }
         ],
     },
@@ -35,53 +35,100 @@ const detectMinecraftClients = () => {
         exec('tasklist', (error, stdout, stderr) => {
 
             if (error || stderr) {
-                return reject('Erro ao listar processos:', error || stderr);
-            }
-
-            const clients = [
-                { name: 'Lunar Client', process: 'Lunar' },
-                { name: 'Badlion', process: 'Badlion' },
-                { name: 'CMPack', process: 'CMPack' },
-                { name: 'ATLauncher', process: 'AtLauncher' },
-                { name: 'TLauncher', process: 'java.exe' },
-                { name: 'Minecraft', process: 'Minecraft' },
-                { name: 'MultiMC', process: 'MultiMC' },
-                { name: 'LabyMod', process: 'LabyMod' },
-                { name: 'Forge', process: 'Forge' },
-                { name: 'Technic Launcher', process: 'Technic' },
-                { name: 'Sklauncher', process: 'Sklauncher' },
-            ];
-
-            let detectedClients = [];
-            let detectedProcess = false;
-
-            clients.forEach(client => {
-                if (stdout.includes(client.process)) {
-                    detectedClients.push(client.name);
-                    detectedProcess = true;
-
-                    if (!currentClients[client.name]) {
-                        currentClients[client.name] = true;
-                        console.log(`[DEBUG] - Cliente ${client.name} foi aberto!`);
+                exec('ps aux', (error, stdout, stderr) => {
+                    if (error || stderr) {
+                        return reject('Erro ao listar processos:', error || stderr);
                     }
-                } else if (currentClients[client.name]) {
-                    currentClients[client.name] = false;
-                    console.log(`[DEBUG] - Cliente ${client.name} foi fechado!`);
-                }
-            });
 
-            const isMinecraftOpen = stdout.includes('javaw.exe');
+                    const clients = [
+                        { name: 'Lunar Client', process: 'lunar' },
+                        { name: 'Badlion', process: 'Badlion' },
+                        { name: 'CMPack', process: 'CMPack' },
+                        { name: 'ATLauncher', process: 'AtLauncher' },
+                        { name: 'TLauncher', process: 'java.exe' },
+                        { name: 'MultiMC', process: 'MultiMC' },
+                        { name: 'LabyMod', process: 'LabyMod' },
+                        { name: 'Forge', process: 'Forge' },
+                        { name: 'Technic Launcher', process: 'Technic' },
+                        { name: 'Sklauncher', process: 'Sklauncher' },
+                    ];
 
-            if (!stdout.includes("java.exe")) isMinecraftRunning = isMinecraftOpen;
-            if (isMinecraftOpen) {
-                if (tlAuth !== true) console.log('[DEBUG] - Minecraft foi aberto!');
-                tlAuth = true;
+                    let detectedClients = [];
+                    let detectedProcess = false;
+
+                    clients.forEach(client => {
+                        if (stdout.includes(client.process)) {
+                            detectedClients.push(client.name);
+                            detectedProcess = true;
+
+                            if (!currentClients[client.name]) {
+                                currentClients[client.name] = true;
+                                console.log(`[DEBUG] - Cliente ${client.name} foi aberto!`);
+                            }
+                        } else if (currentClients[client.name]) {
+                            currentClients[client.name] = false;
+                            console.log(`[DEBUG] - Cliente ${client.name} foi fechado!`);
+                        }
+                    });
+
+                    const isMinecraftOpen = stdout.includes('Minecraft');
+                    if (!stdout.includes("java.exe")) isMinecraftRunning = isMinecraftOpen;
+                    if (isMinecraftOpen) {
+                        if (tlAuth !== true) console.log('[DEBUG] - Minecraft foi aberto!');
+                        tlAuth = true;
+                    } else {
+                        if (tlAuth !== false) console.log('[DEBUG] - Minecraft foi fechado!');
+                        tlAuth = false;
+                    }
+                    resolve(detectedClients);
+                });
             } else {
-                if (tlAuth !== false) console.log('[DEBUG] - Minecraft foi fechado!');
-                tlAuth = false;
-            }
 
-            resolve(detectedClients);
+                const clients = [
+                    { name: 'Lunar Client', process: 'Lunar' },
+                    { name: 'Badlion', process: 'Badlion' },
+                    { name: 'CMPack', process: 'CMPack' },
+                    { name: 'ATLauncher', process: 'AtLauncher' },
+                    { name: 'TLauncher', process: 'java.exe' },
+                    { name: 'Minecraft', process: 'Minecraft' },
+                    { name: 'MultiMC', process: 'MultiMC' },
+                    { name: 'LabyMod', process: 'LabyMod' },
+                    { name: 'Forge', process: 'Forge' },
+                    { name: 'Technic Launcher', process: 'Technic' },
+                    { name: 'Sklauncher', process: 'Sklauncher' },
+                ];
+
+                let detectedClients = [];
+                let detectedProcess = false;
+
+                clients.forEach(client => {
+                    if (stdout.includes(client.process)) {
+                        detectedClients.push(client.name);
+                        detectedProcess = true;
+
+                        if (!currentClients[client.name]) {
+                            currentClients[client.name] = true;
+                            console.log(`[DEBUG] - Cliente ${client.name} foi aberto!`);
+                        }
+                    } else if (currentClients[client.name]) {
+                        currentClients[client.name] = false;
+                        console.log(`[DEBUG] - Cliente ${client.name} foi fechado!`);
+                    }
+                });
+
+                const isMinecraftOpen = stdout.includes('javaw.exe');
+
+                if (!stdout.includes("java.exe")) isMinecraftRunning = isMinecraftOpen;
+                if (isMinecraftOpen) {
+                    if (tlAuth !== true) console.log('[DEBUG] - Minecraft foi aberto!');
+                    tlAuth = true;
+                } else {
+                    if (tlAuth !== false) console.log('[DEBUG] - Minecraft foi fechado!');
+                    tlAuth = false;
+                }
+
+                resolve(detectedClients);
+            }
         });
     });
 };
@@ -99,10 +146,10 @@ module.exports.presence = async (nick) => {
 
             if (String(nick) === "vitorxp") {
                 presence.config.smallImageKey = "vitorxp";
-                presence.config.smallImageText = nick;
+                presence.config.smallImageText = String(nick || "Desconhecido");
             } else {
                 presence.config.smallImageKey = "usernick";
-                presence.config.smallImageText = nick;
+                presence.config.smallImageText = String(nick || "Desconhecido");
             }
         }
 

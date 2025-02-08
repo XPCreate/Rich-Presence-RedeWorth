@@ -1,4 +1,4 @@
-# Atividade Rede Worth `v1.7.5`.
+# Atividade Rede Worth `v1.8.4`.
 ### Apenas para fins de divulgação.
 
 ## - Como usar:
