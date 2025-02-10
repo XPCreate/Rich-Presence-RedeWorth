@@ -1,11 +1,10 @@
-# Atividade Rede Worth `v1.8.5`  
+# Atividade Rede Worth `v1.8.6`  
 ### Apenas para fins de divulgação.  
 
 ## 🔹 O que foi atualizado:  
 - Melhorias no código.  
-- Correção de erros de conexão com o Discord.  
-- Agora, apenas membros da equipe da **Rede Worth** verão o avatar da skin.  
-- Sistema de verificar atualização está funcionando!
+- Correção na conexão com a api.
+- `TypeError: fetch failed` corrigido;
 
 ## 🔹 Como usar:  
 1. Extraia os arquivos para uma pasta.  

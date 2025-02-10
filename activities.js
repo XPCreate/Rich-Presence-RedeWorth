@@ -32,10 +32,10 @@ const detectMinecraftClients = () => {
 
     return new Promise((resolve, reject) => {
 
-        exec('tasklist', (error, stdout, stderr) => {
+        exec('tasklist', (error, stdout, stderr) => { // padrão windows
 
             if (error || stderr) {
-                exec('ps aux', (error, stdout, stderr) => {
+                exec('ps aux', (error, stdout, stderr) => { // padrão linux
                     if (error || stderr) {
                         return reject('Erro ao listar processos:', error || stderr);
                     }
@@ -136,7 +136,7 @@ const detectMinecraftClients = () => {
 module.exports.presence = async (nick) => {
     try {
         const clients = await detectMinecraftClients();
-        const response = await fetch('https://api.mcsrvstat.us/3/redesky.net');
+        const response = await fetch('https://api.mcsrvstat.us/3/redeworth.com');
         if (response.status === 200) {
             const data = await response.json();
             presence.config.state = `ip: redeworth.com${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
@@ -156,7 +156,6 @@ module.exports.presence = async (nick) => {
 
         return presence.config;
     } catch (err) {
-        console.error(err);
         return presence.config;
     }
 };
