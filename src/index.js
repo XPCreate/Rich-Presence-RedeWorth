@@ -54,7 +54,7 @@ figlet('vitor_xp', async (err, data) => {
 
   const textoPequeno = "Criado por:";
   const textoPequenoMais = "Para a Rede Worth no intuito de divulgar o servidor no discord.";
-  const textoVersao = "Versão: " + peq.version + " - Editado: 09/01/2025";
+  const textoVersao = "Versão: " + peq.version + " - Editado: 10/02/2025";
 
   console.log(`
   \x1b[0;37m---------------------------------------------------------------\x1b[0m
