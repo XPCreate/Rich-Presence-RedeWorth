@@ -5,6 +5,7 @@
 - Melhorias no código.  
 - Correção de erros de conexão com o Discord.  
 - Agora, apenas membros da equipe da **Rede Worth** verão o avatar da skin.  
+- Sistema de verificar atualização está funcionando!
 
 ## 🔹 Como usar:  
 1. Extraia os arquivos para uma pasta.  
