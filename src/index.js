@@ -57,15 +57,15 @@ figlet('vitor_xp', async (err, data) => {
   const textoVersao = "Versão: " + peq.version + " - Editado: 09/01/2025";
 
   console.log(`
-\x1b[0;37m---------------------------------------------------------------\x1b[0m
-\x1b[0;37m \x1b[0;36m${centralizarTexto(textoPequeno, largura)}\x1b[0m
+  \x1b[0;37m---------------------------------------------------------------\x1b[0m
+  \x1b[0;37m \x1b[0;36m${centralizarTexto(textoPequeno, largura)}\x1b[0m
 
-\x1b[0;37m\x1b[0;32m${centralizarTexto(data, largura)}\x1b[0m
+  \x1b[0;37m\x1b[0;32m${centralizarTexto(data, largura)}\x1b[0m
 
-\x1b[0;37m\x1b[0;33m${centralizarTexto(textoPequenoMais, largura)}\x1b[0m
-\x1b[0;37m\x1b[0;35m${centralizarTexto(textoVersao, largura)}\x1b[0m
-\x1b[0;37m---------------------------------------------------------------\x1b[0m
-`);
+  \x1b[0;37m\x1b[0;33m${centralizarTexto(textoPequenoMais, largura)}\x1b[0m
+  \x1b[0;37m\x1b[0;35m${centralizarTexto(textoVersao, largura)}\x1b[0m
+  \x1b[0;37m---------------------------------------------------------------\x1b[0m
+  `);
 });
 
 setTimeout(async () => {
@@ -73,6 +73,7 @@ setTimeout(async () => {
 }, 2000)
 
 var nickName = null;
+var avatar = null;
 
 function customLog(pergunta, callback) {
   process.stdout.write(pergunta);
@@ -105,21 +106,19 @@ async function start() {
           clearInterval(adsdf);
           console.log("[DEBUG] - Sistema ativo, conexão conectado com o Discord.")
           console.log("[DEBUG] - Atividade personalizada ativada com sucesso! (reload a cada 15s)")
-          customLog(`Qual seu nick no Minecraft?
-`, (a) => {
-            nickName = a;
-            console.log(`O nick mostrado no status será: ${nickName}.`)
-            process.stdin.pause();
 
-          });
+          await setActivity();
 
-          setTimeout(async () => {
+          setInterval(async () => {
             await setActivity();
+          }, 30000);
 
-            setInterval(async () => {
-              await setActivity();
-            }, 15000);
-          }, 1500)
+          customLog(`[SYSTEM] - Qual seu nick no Minecraft?\n- `, async (a) => {
+            nickName = a;
+            console.log(`[DEBUG] - O nick mostrado no status será: ${nickName}.`)
+            await setActivity();
+            process.stdin.pause();
+          });
         }
       }, 0);
     });

@@ -50,7 +50,7 @@ const detectMinecraftClients = () => {
                         { name: 'LabyMod', process: 'LabyMod' },
                         { name: 'Forge', process: 'Forge' },
                         { name: 'Technic Launcher', process: 'Technic' },
-                        { name: 'Sklauncher', process: 'Sklauncher' },
+                        { name: 'Sklauncher', process: 'Sklauncher' }
                     ];
 
                     let detectedClients = [];
@@ -95,7 +95,7 @@ const detectMinecraftClients = () => {
                     { name: 'LabyMod', process: 'LabyMod' },
                     { name: 'Forge', process: 'Forge' },
                     { name: 'Technic Launcher', process: 'Technic' },
-                    { name: 'Sklauncher', process: 'Sklauncher' },
+                    { name: 'Sklauncher', process: 'Sklauncher' }
                 ];
 
                 let detectedClients = [];
@@ -144,11 +144,12 @@ module.exports.presence = async (nick) => {
             presence.config.partySize = data.motd ? data.players.online / 2 : 0;
             presence.config.partyMax = data.motd ? data.players.max : 0;
 
-            if (String(nick) === "vitorxp") {
-                presence.config.smallImageKey = "vitorxp";
+            if (nick === "vitorxp" | nick === "MihawkRevex" | nick === "Draccount" | nick === "MuriloRevex" | nick === "lkttjota" | nick === "Menino_Tutuh" | nick === "MimiShimizu" | nick === "MoonSpy_" | nick === "Neto33rec") {
+                presence.config.smallImageKey = `${String(nick).toLowerCase()}`;
                 presence.config.smallImageText = String(nick || "Desconhecido");
-            } else {
-                presence.config.smallImageKey = "usernick";
+            }
+            else {
+                presence.config.smallImageKey = `usernick`;
                 presence.config.smallImageText = String(nick || "Desconhecido");
             }
         }
