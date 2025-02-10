@@ -131,3 +131,6 @@ dist
 
 #package
 package-lock.json
+
+#zips
+.zip
