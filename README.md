@@ -1,10 +1,12 @@
-# Atividade Rede Worth `v1.8.6`  
+# Atividade Rede Worth `v1.8.7`  
 ### Apenas para fins de divulgação.  
 
 ## 🔹 O que foi atualizado:  
-- Melhorias no código.  
-- Correção na conexão com a api.
-- `TypeError: fetch failed` corrigido;
+- `Error: child "activity" fails` corrigido.
+- Arrumando conexão com o Discord.
+- Melhorias no codigo foram feitas.
+- Arrumando incompatibilidade com linux (alguns dispositivos tiveram instabilidades).
+
 
 ## 🔹 Como usar:  
 1. Extraia os arquivos para uma pasta.  

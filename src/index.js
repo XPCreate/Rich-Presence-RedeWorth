@@ -54,7 +54,7 @@ figlet('vitor_xp', async (err, data) => {
 
   const textoPequeno = "Criado por:";
   const textoPequenoMais = "Para a Rede Worth no intuito de divulgar o servidor no discord.";
-  const textoVersao = "Versão: " + peq.version + " - Editado: 10/02/2025";
+  const textoVersao = "Versão: " + peq.version + " - Editado: 12/02/2025";
 
   console.log(`
   \x1b[0;37m---------------------------------------------------------------\x1b[0m
@@ -129,7 +129,7 @@ async function start() {
       })
       .catch(async err => {
         console.error(err);
-        if (discordIsNotLog === false) console.log("[DEBUG] - Discord desconectado, reconectando...");
+        if (discordIsNotLog === false) console.log("[DEBUG] - Discord desconectado, reconectando... (se está mensagem persistir, reinicie o Discord.)");
         discordIsNotLog = true;
         await start();
       });
