@@ -18,7 +18,7 @@ async function verificarAtualizarVersao() {
     const versaoLocal = `v${peq.version}`;
 
     if (versaoLocal !== versaoMaisRecente) {
-      console.log(`\x1b[0;33m[AVISO] Uma nova versão está disponível: ${versaoMaisRecente}.\x1b[0m`);
+      console.log(`\x1b[0;33m[AVISO] Uma nova versão está disponível: ${versaoMaisRecente}.\x1b[0m\n➡  \x1b[0;33mBaixe ela: ${data.assets[0].browser_download_url}\x1b[0m`);
     } else {
       console.log("\x1b[0;32m[SUCCESSO] Você já está utilizando a versão mais recente.\x1b[0m");
     }

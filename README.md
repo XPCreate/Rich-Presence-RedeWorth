@@ -1,12 +1,11 @@
-# Atividade Rede Worth `v1.8.7`  
+# Atividade Rede Worth `v1.8.8`  
 ### Apenas para fins de divulgação.  
 
 ## 🔹 O que foi atualizado:  
-- `Error: child "activity" fails` corrigido.
-- Arrumando conexão com o Discord.
+- `Error: child "activity" fails` corrigido novamente.
 - Melhorias no codigo foram feitas.
-- Arrumando incompatibilidade com linux (alguns dispositivos tiveram instabilidades).
-
+- Adicionado emojis novos nos botões de conectar.
+- Agora após falhar na verificação do status do servidor, irá informar.
 
 ## 🔹 Como usar:  
 1. Extraia os arquivos para uma pasta.  

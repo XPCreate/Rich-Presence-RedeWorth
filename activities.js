@@ -12,7 +12,7 @@ const presence = {
         instance: true,
         buttons: [
             {
-                label: '🟢 Conectar',
+                label: '🔴 Conectar',
                 url: 'minecraft://redeworth.com:25565',
             },
             {
@@ -94,8 +94,12 @@ module.exports.presence = async (nick) => {
             const data = await response.json();
             presence.config.state = `ip: redeworth.com${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
             presence.config.details = data.motd ? data.motd.clean[0] : "Servidor Offline 🔴.";
-            presence.config.partySize = data.motd ? data.players.online / 2 : 1;
-            presence.config.partyMax = data.motd ? data.players.max : 1;
+            presence.config.buttons[0].label = data.motd ? "🟢 Conectar" : "🔴 Conectar";
+
+            if(String(data.motd.clean[0]).includes("Estamos em manutenção!")) presence.config.buttons[0].label = "🟡 Conectar"
+
+            presence.config.partySize = data.motd ? data.players.online / 2 : 0;
+            presence.config.partyMax = data.motd ? (data.players.online !== 0 ? data.players.max : 0) : 0;
 
             if (nick === "vitorxp" | nick === "MihawkRevex" | nick === "Draccount" | nick === "MuriloRevex" | nick === "lkttjota" | nick === "Menino_Tutuh" | nick === "MimiShimizu" | nick === "MoonSpy_" | nick === "Neto33rec") {
                 presence.config.smallImageKey = `${String(nick).toLowerCase()}`;
@@ -105,6 +109,9 @@ module.exports.presence = async (nick) => {
                 presence.config.smallImageKey = `usernick`;
                 presence.config.smallImageText = String(nick || "Desconhecido");
             }
+        } else {
+            console.error('[ERROR] - Falha ao conectar ao Minecraft Status API. (tentando em 15s)');
+            return presence.config;
         }
 
         return presence.config;
