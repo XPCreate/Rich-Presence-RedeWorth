@@ -25,7 +25,7 @@ const presence = {
 
 let currentClients = {};
 let isMinecraftRunning = false;
-let tlAuth = false
+let tlAuth = false;
 
 const detectMinecraftClients = () => {
     const { exec } = require('child_process');
@@ -33,7 +33,6 @@ const detectMinecraftClients = () => {
     return new Promise((resolve, reject) => {
         const platformTaskInfo = process.platform === "win32" ? "tasklist" : "ps aux";
         exec(platformTaskInfo, (error, stdout, stderr) => {
-
             if (error || stderr) {
                 return reject('Erro ao listar processos:', error || stderr);
             }
@@ -96,16 +95,15 @@ module.exports.presence = async (nick) => {
             presence.config.details = data.motd ? data.motd.clean[0] : "Servidor Offline 🔴.";
             presence.config.buttons[0].label = data.motd ? "🟢 Conectar" : "🔴 Conectar";
 
-            if(String(data.motd.clean[0]).includes("Estamos em manutenção!")) presence.config.buttons[0].label = "🟡 Conectar"
+            if(String(data.motd.clean[0]).includes("Estamos em manutenção!")) presence.config.buttons[0].label = "🟡 Conectar";
 
             presence.config.partySize = data.motd ? data.players.online / 2 : 0;
             presence.config.partyMax = data.motd ? (data.players.online !== 0 ? data.players.max : 0) : 0;
 
-            if (nick === "vitorxp" | nick === "MihawkRevex" | nick === "Draccount" | nick === "MuriloRevex" | nick === "lkttjota" | nick === "Menino_Tutuh" | nick === "MimiShimizu" | nick === "MoonSpy_" | nick === "Neto33rec") {
+            if (["vitorxp", "MihawkRevex", "Draccount", "MuriloRevex", "lkttjota", "Menino_Tutuh", "ShimizuMimi", "MoonSpy_", "Neto33rec"].includes(nick)) {
                 presence.config.smallImageKey = `${String(nick).toLowerCase()}`;
                 presence.config.smallImageText = String(nick || "Desconhecido");
-            }
-            else {
+            } else {
                 presence.config.smallImageKey = `usernick`;
                 presence.config.smallImageText = String(nick || "Desconhecido");
             }

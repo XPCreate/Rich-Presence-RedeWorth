@@ -1,139 +1,97 @@
 const figlet = require('figlet');
-const peq = require("../package.json");
+// const fetch = require('node-fetch');
+const peq = require('../package.json');
+const DiscordRPC = require('discord-rpc');
+const presence = require('../activities.js');
+
+const CLIENT_ID = '1325483160011804754';
+const RPC = new DiscordRPC.Client({ transport: 'ipc' });
+let discordIsNotLog = false;
+let nickName = null;
 
 async function verificarAtualizarVersao() {
   try {
-    const response = await fetch("https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest");
-    if (!response.ok) {
-      return console.error("\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m")
-    }
-
+    const response = await fetch('https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest');
+    if (!response.ok) throw new Error('Falha ao obter versão mais recente.');
+    
     const data = await response.json();
-
-    if (!data.tag_name) {
-      throw new Error("Nenhuma release encontrada no repositório do GitHub.");
-    }
+    if (!data.tag_name) throw new Error('Nenhuma release encontrada no GitHub.');
 
     const versaoMaisRecente = data.tag_name;
     const versaoLocal = `v${peq.version}`;
 
     if (versaoLocal !== versaoMaisRecente) {
-      console.log(`\x1b[0;33m[AVISO] Uma nova versão está disponível: ${versaoMaisRecente}.\x1b[0m\n➡  \x1b[0;33mBaixe ela: ${data.assets[0].browser_download_url}\x1b[0m`);
+      console.log(`\x1b[0;33m[AVISO] Nova versão disponível: ${versaoMaisRecente}.\n➡ Baixe aqui: ${data.assets[0]?.browser_download_url}\x1b[0m`);
     } else {
-      console.log("\x1b[0;32m[SUCCESSO] Você já está utilizando a versão mais recente.\x1b[0m");
+      console.log('\x1b[0;32m[SUCCESSO] Você já está na versão mais recente.\x1b[0m');
     }
-  } catch (err) {
-    console.error("\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m");
+  } catch (error) {
+    console.error('\x1b[0;31m[ERRO] Não foi possível verificar a versão mais recente.\x1b[0m', error);
   }
 }
 
-var discordIsNotLog = false;
-
 function centralizarTexto(texto, largura) {
-  const linhas = texto.split('\n');
-  return linhas.map(linha => {
+  return texto.split('\n').map(linha => {
     const espacos = Math.max(Math.floor((largura - linha.length) / 2), 0);
-
-    const espacosFinal = largura - espacos - linha.length;
-    const espacosFinais = Math.max(espacosFinal, 0);
-
-    return ' '.repeat(espacos) + linha + ' '.repeat(espacosFinais);
+    return ' '.repeat(espacos) + linha;
   }).join('\n');
 }
 
-figlet('vitor_xp', async (err, data) => {
-  console.clear("")
+async function exibirBanner() {
+  console.clear();
   await verificarAtualizarVersao();
 
-  if (err) {
-    console.log('Algo deu errado...', err);
-    return;
-  }
+  figlet('vitor_xp', (err, data) => {
+    if (err) return console.error('Erro ao gerar ASCII Art:', err);
 
-  const largura = 60;
-
-  const textoPequeno = "Criado por:";
-  const textoPequenoMais = "Para a Rede Worth no intuito de divulgar o servidor no discord.";
-  const textoVersao = "Versão: " + peq.version + " - Editado: 12/02/2025";
-
-  console.log(`
-  \x1b[0;37m---------------------------------------------------------------\x1b[0m
-  \x1b[0;37m \x1b[0;36m${centralizarTexto(textoPequeno, largura)}\x1b[0m
-
-  \x1b[0;37m\x1b[0;32m${centralizarTexto(data, largura)}\x1b[0m
-
-  \x1b[0;37m\x1b[0;33m${centralizarTexto(textoPequenoMais, largura)}\x1b[0m
-  \x1b[0;37m\x1b[0;35m${centralizarTexto(textoVersao, largura)}\x1b[0m
-  \x1b[0;37m---------------------------------------------------------------\x1b[0m
-  `);
-});
-
-setTimeout(async () => {
-  start();
-}, 2000)
-
-var nickName = null;
-var avatar = null;
-
-function customLog(pergunta, callback) {
-  process.stdout.write(pergunta);
-  process.stdin.once('data', (data) => {
-    const resposta = data.toString().trim();
-    callback(resposta);
+    const largura = 60;
+    console.log(`\n\x1b[0;37m---------------------------------------------------------------\x1b[0m`);
+    console.log(`\x1b[0;36m${centralizarTexto('Criado por:', largura)}\x1b[0m`);
+    console.log(`\x1b[0;32m${centralizarTexto(data, largura)}\x1b[0m`);
+    console.log(`\x1b[0;33m${centralizarTexto('Para a Rede Worth - Divulgação no Discord.', largura)}\x1b[0m`);
+    console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Editado: 24/02/2025`, largura)}\x1b[0m`);
+    console.log(`\x1b[0;37m---------------------------------------------------------------\x1b[0m\n`);
   });
 }
 
-async function start() {
+function customLog(pergunta, callback) {
+  process.stdout.write(pergunta);
+  process.stdin.once('data', data => callback(data.toString().trim()));
+}
+
+async function iniciarRPC() {
   try {
-    const DiscordRPC = require('discord-rpc');
-    const presence = require('../activities.js');
-
-    const client_id = "1325483160011804754";
-    const RPC = new DiscordRPC.Client({ transport: 'ipc' });
-
-    DiscordRPC.register(client_id);
-
-    async function setActivity() {
-      if (!RPC) return console.log(rpc);
-      RPC.setActivity(await presence.presence(nickName));
-    }
+    DiscordRPC.register(CLIENT_ID);
+    await RPC.login({ clientId: CLIENT_ID });
+    console.log('[DEBUG] - Conectado ao Discord RPC.');
 
     RPC.on('ready', async () => {
-      console.log('[DEBUG] - Ativado sistema...')
-
-      var adsdf = setInterval(async () => {
-        if (RPC) {
-          clearInterval(adsdf);
-          console.log("[DEBUG] - Sistema ativo, conexão conectado com o Discord.")
-          console.log("[DEBUG] - Atividade personalizada ativada com sucesso! (reload a cada 15s)")
-
-          await setActivity();
-
-          setInterval(async () => {
-            await setActivity();
-          }, 30000);
-
-          customLog(`[SYSTEM] - Qual seu nick no Minecraft?\n- `, async (a) => {
-            nickName = a;
-            console.log(`[DEBUG] - O nick mostrado no status será: ${nickName}.`)
-            await setActivity();
-            process.stdin.pause();
-          });
-        }
-      }, 0);
+      console.log('[DEBUG] - Atividade personalizada ativada (atualização a cada 30s)');
+      atualizarAtividade();
+      setInterval(atualizarAtividade, 15000);
     });
-
-    RPC.login({ clientId: client_id })
-      .then(async () => {
-        discordIsNotLog = false;
-      })
-      .catch(async err => {
-        console.error(err);
-        if (discordIsNotLog === false) console.log("[DEBUG] - Discord desconectado, reconectando... (se está mensagem persistir, reinicie o Discord.)");
-        discordIsNotLog = true;
-        await start();
-      });
   } catch (err) {
-    console.log(err)
+    console.error('[ERRO] - Falha na conexão com o Discord:', err);
+    if (!discordIsNotLog) console.log('[DEBUG] - Tentando reconectar ao Discord...');
+    discordIsNotLog = true;
+    setTimeout(iniciarRPC, 5000);
   }
 }
+
+async function atualizarAtividade() {
+  if (!RPC) return;
+  RPC.setActivity(await presence.presence(nickName));
+}
+
+async function iniciar() {
+  await exibirBanner();
+  await iniciarRPC();
+  customLog('[SYSTEM] - Qual seu nick no Minecraft?\n- ', async resposta => {
+    nickName = resposta;
+    console.log(`[DEBUG] - Nick registrado: ${nickName}`);
+    atualizarAtividade();
+    process.stdin.pause();
+  });
+}
+
+setTimeout(iniciar, 2000);

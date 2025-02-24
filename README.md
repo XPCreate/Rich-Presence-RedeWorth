@@ -1,11 +1,8 @@
-# Atividade Rede Worth `v1.8.8`  
+# Atividade Rede Worth `v1.8.9`  
 ### Apenas para fins de divulgação.  
 
 ## 🔹 O que foi atualizado:  
-- `Error: child "activity" fails` corrigido novamente.
 - Melhorias no codigo foram feitas.
-- Adicionado emojis novos nos botões de conectar.
-- Agora após falhar na verificação do status do servidor, irá informar.
 
 ## 🔹 Como usar:  
 1. Extraia os arquivos para uma pasta.  
