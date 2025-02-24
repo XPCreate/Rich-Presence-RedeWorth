@@ -1,4 +1,4 @@
-# Atividade Rede Worth `v1.8.9`  
+# Atividade Rede Worth `v1.9.0`  
 ### Apenas para fins de divulgação.  
 
 ## 🔹 O que foi atualizado:  

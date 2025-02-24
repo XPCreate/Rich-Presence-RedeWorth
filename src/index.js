@@ -3,9 +3,9 @@ const figlet = require('figlet');
 const peq = require('../package.json');
 const DiscordRPC = require('discord-rpc');
 const presence = require('../activities.js');
-
 const CLIENT_ID = '1325483160011804754';
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });
+
 let discordIsNotLog = false;
 let nickName = null;
 
@@ -13,7 +13,7 @@ async function verificarAtualizarVersao() {
   try {
     const response = await fetch('https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest');
     if (!response.ok) throw new Error('Falha ao obter versão mais recente.');
-    
+
     const data = await response.json();
     if (!data.tag_name) throw new Error('Nenhuma release encontrada no GitHub.');
 
@@ -62,19 +62,29 @@ function customLog(pergunta, callback) {
 async function iniciarRPC() {
   try {
     DiscordRPC.register(CLIENT_ID);
-    await RPC.login({ clientId: CLIENT_ID });
+    RPC.login({ clientId: CLIENT_ID })
+      .then(async () => {
+        discordIsNotLog = false;
+      })
+      .catch(async err => {
+        console.error(err);
+        if (discordIsNotLog === false) console.log("[DEBUG] - Discord desconectado, reconectando... (se está mensagem persistir, reinicie o Discord.)");
+        discordIsNotLog = true;
+        await start();
+      });
+
     console.log('[DEBUG] - Conectado ao Discord RPC.');
 
     RPC.on('ready', async () => {
-      console.log('[DEBUG] - Atividade personalizada ativada (atualização a cada 30s)');
-      atualizarAtividade();
-      setInterval(atualizarAtividade, 15000);
+    console.log('[DEBUG] - Atividade personalizada ativada (atualização a cada 15s)');
+    await atualizarAtividade();
+    setInterval(atualizarAtividade, 15000);
     });
   } catch (err) {
     console.error('[ERRO] - Falha na conexão com o Discord:', err);
     if (!discordIsNotLog) console.log('[DEBUG] - Tentando reconectar ao Discord...');
     discordIsNotLog = true;
-    setTimeout(iniciarRPC, 5000);
+    setTimeout(async () => { await iniciarRPC() }, 5000);
   }
 }
 
@@ -83,15 +93,17 @@ async function atualizarAtividade() {
   RPC.setActivity(await presence.presence(nickName));
 }
 
+setTimeout(async () => { await exibirBanner() });
+
 async function iniciar() {
-  await exibirBanner();
-  await iniciarRPC();
   customLog('[SYSTEM] - Qual seu nick no Minecraft?\n- ', async resposta => {
     nickName = resposta;
     console.log(`[DEBUG] - Nick registrado: ${nickName}`);
-    atualizarAtividade();
+    setTimeout(async () => {
+      await iniciarRPC();
+    }, 500)
     process.stdin.pause();
   });
 }
 
-setTimeout(iniciar, 2000);
+setTimeout(iniciar, 1000);
