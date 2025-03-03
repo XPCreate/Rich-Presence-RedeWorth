@@ -30,7 +30,23 @@ process.env.CONFIG_DATA = configData;
 
 let mainWindow;
 let rpcProcess;
+let splashWindow
 
+const createSplashWindow = () => {
+  splashWindow = new BrowserWindow({
+    width: 400,
+    height: 250,
+    frame: false,
+    alwaysOnTop: true,
+    resizable: false,
+    transparent: false,
+    webPreferences: {
+      nodeIntegration: false
+    }
+  });
+
+  splashWindow.loadFile('ui/splash.html');
+};
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 950,
@@ -60,6 +76,13 @@ const createMainWindow = () => {
     }
   }, 1000);
 };
+
+if (splashWindow) {
+  setTimeout(() => {
+    splashWindow.close();
+    mainWindow.show();
+  }, 5000);
+}
 
 const startRPCProcess = (nick) => {
   
