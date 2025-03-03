@@ -1,12 +1,11 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# Atividade RedeWorth `v1.9.2`  
+# Atividade RedeWorth `v1.9.3`  
 ### 🚀 Apenas para fins de divulgação  
 
 ## Atualizações:
-- Implementamos uma logica para evitar erros em versões do node.js antigas.
-- Corrigimos erros de inicialização da parte do run.vbs (windows).
-- Adicionamos novas logicas de inicializações para os arquivos `run` e `setup` (global).
+- Implementamos sistema de aviso antes de fechar a janela.
+- Adicionamos uma pagina de carregamento do sistema.
 
 ----------------------------------------------------------------
 

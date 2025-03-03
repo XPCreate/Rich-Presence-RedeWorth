@@ -1,7 +1,6 @@
 const { ipcRenderer } = require('electron');
 const peq = require("../package.json");
 
-let editTimeActivitiesProfile = 0;
 let downloadNewVersion;
 let dateOnActivities = 0;
 let dateReloadStatus = 0;

@@ -1,41 +1,31 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const peq = require('./package.json');
 const config = require('./config');
 
 const formatText = (text) => text.replace(/\n/g, '<br>');
+let beforeRPCProcess = false;
 
-let currentDate = new Date();
-let formattedDate = currentDate.toLocaleString("en-CA", {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false
-}).replace(',', '');
+let mainWindow, rpcProcess, splashWindow;
 
-let configData = JSON.stringify(
-  {
-    editTimeActivitiesProfile: formattedDate,
-    showClient: true,
-    showTimeActivities: true,
-    nickname: "Desconhecido"
-  }
-);
-
-process.env.CONFIG_DATA = configData;
-
-let mainWindow;
-let rpcProcess;
-let splashWindow
+const getCurrentDate = () => {
+  const currentDate = new Date();
+  return currentDate.toLocaleString("en-CA", {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).replace(',', '');
+};
 
 const createSplashWindow = () => {
   splashWindow = new BrowserWindow({
-    width: 400,
-    height: 250,
+    width: 500,
+    height: 300,
     frame: false,
     alwaysOnTop: true,
     resizable: false,
@@ -47,6 +37,7 @@ const createSplashWindow = () => {
 
   splashWindow.loadFile('ui/splash.html');
 };
+
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 950,
@@ -64,9 +55,8 @@ const createMainWindow = () => {
     Menu.setApplicationMenu(menu);
   }
 
-
   mainWindow.loadFile('ui/index.html');
-
+  
   const interval = setInterval(() => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('versionAPP', `v${peq.version}`);
@@ -77,21 +67,11 @@ const createMainWindow = () => {
   }, 1000);
 };
 
-if (splashWindow) {
-  setTimeout(() => {
-    splashWindow.close();
-    mainWindow.show();
-  }, 5000);
-}
-
 const startRPCProcess = (nick) => {
-  
   console.clear();
   mainWindow.webContents.send('startRPC', "ok");
 
-  if (rpcProcess) {
-    rpcProcess.kill();
-  }
+  if (rpcProcess) rpcProcess.kill();
 
   rpcProcess = spawn('node', ['src/index.js'], {
     env: { ...process.env, NICKNAME: nick },
@@ -99,13 +79,7 @@ const startRPCProcess = (nick) => {
   });
 
   rpcProcess.stdout.on('data', (data) => {
-    if (data.toString().includes("[DEBUG] - Minecraft foi aberto!")) {
-      mainWindow.webContents.send('activities-minecraft', Date.now());
-    } else if (data.toString().includes("[DEBUG] - Minecraft foi fechado!")) {
-      mainWindow.webContents.send('activities-minecraft', 0);
-    }
-
-    mainWindow.webContents.send('terminal-output', formatText(data.toString()));
+    handleRPCProcessOutput(data);
   });
 
   rpcProcess.stderr.on('data', (data) => {
@@ -115,6 +89,43 @@ const startRPCProcess = (nick) => {
   rpcProcess.on('close', () => {
     mainWindow.webContents.send('terminal-output', formatText('[DEBUG] - Processo encerrado com sucesso.'));
   });
+
+  mainWindow.on('close', handleWindowClose);
+};
+
+const handleRPCProcessOutput = (data) => {
+  const output = data.toString();
+  if (output.includes("[DEBUG] - Minecraft foi aberto!")) {
+    mainWindow.webContents.send('activities-minecraft', Date.now());
+  } else if (output.includes("[DEBUG] - Minecraft foi fechado!")) {
+    mainWindow.webContents.send('activities-minecraft', 0);
+  }
+
+  mainWindow.webContents.send('terminal-output', formatText(output));
+};
+
+const handleWindowClose = (event) => {
+  if (!beforeRPCProcess) {
+    beforeRPCProcess = true;
+    event.preventDefault();
+
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      dialog.showMessageBox(mainWindow, {
+        type: 'question',
+        buttons: ['Cancelar', 'Fechar'],
+        defaultId: 1,
+        title: 'Confirmação',
+        message: 'Tem certeza que deseja fechar a aplicação?\nCaso feche, a atividade será parada imediatamente...',
+      }).then((result) => {
+        beforeRPCProcess = (result.response === 0);
+        if (!beforeRPCProcess) app.quit();
+      }).catch((err) => {
+        console.error("Erro ao exibir a caixa de diálogo:", err);
+      });
+    } else {
+      app.quit();
+    }
+  }
 };
 
 const stopRPCProcess = () => {
@@ -125,24 +136,23 @@ const stopRPCProcess = () => {
   }
 };
 
-app.whenReady().then(() => {
-  createMainWindow();
+const initializeApp = () => {
+  createSplashWindow();
 
-  ipcMain.on('startRPC', (event, nick) => {
-    startRPCProcess(nick);
-  });
+  setTimeout(() => {
+    createMainWindow();
+    splashWindow.close();
+  }, 5000);
 
-  ipcMain.on('stopRPC', () => {
-    stopRPCProcess();
-  });
-
+  ipcMain.on('startRPC', (event, nick) => startRPCProcess(nick));
+  ipcMain.on('stopRPC', stopRPCProcess);
   ipcMain.on('config', (event, data) => {
-    if (rpcProcess) {
-      rpcProcess.stdin.write(JSON.stringify(data) + '\n');
-    }
+    if (rpcProcess) rpcProcess.stdin.write(JSON.stringify(data) + '\n');
   });
 
   app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
   });
-});
+};
+
+app.whenReady().then(initializeApp);
