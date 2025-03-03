@@ -24,8 +24,8 @@ const getCurrentDate = () => {
 
 const createSplashWindow = () => {
   splashWindow = new BrowserWindow({
-    width: 500,
-    height: 300,
+    width: 950,
+    height: 600,
     frame: false,
     alwaysOnTop: true,
     resizable: false,
@@ -105,7 +105,7 @@ const handleRPCProcessOutput = (data) => {
 };
 
 const handleWindowClose = (event) => {
-  if (!beforeRPCProcess) {
+  if (beforeRPCProcess === false) {
     beforeRPCProcess = true;
     event.preventDefault();
 
@@ -117,8 +117,8 @@ const handleWindowClose = (event) => {
         title: 'Confirmação',
         message: 'Tem certeza que deseja fechar a aplicação?\nCaso feche, a atividade será parada imediatamente...',
       }).then((result) => {
-        beforeRPCProcess = (result.response === 0);
-        if (!beforeRPCProcess) app.quit();
+        beforeRPCProcess = (result.response === 1);
+        if (result.response === 1) app.quit();
       }).catch((err) => {
         console.error("Erro ao exibir a caixa de diálogo:", err);
       });
@@ -141,8 +141,10 @@ const initializeApp = () => {
 
   setTimeout(() => {
     createMainWindow();
-    splashWindow.close();
-  }, 5000);
+    setTimeout(() => {
+      splashWindow.close();
+    }, 800);
+  }, 3000);
 
   ipcMain.on('startRPC', (event, nick) => startRPCProcess(nick));
   ipcMain.on('stopRPC', stopRPCProcess);
