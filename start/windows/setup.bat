@@ -17,12 +17,12 @@ if %errorlevel% neq 0 (
         echo Depois de concluir a instalação, pressione qualquer tecla para continuar.
         pause
         
-        start "" /D "%~dp0" run.bat
+        start "" /B "%~dp0\run.vbs"  >nul 2>&1
     ) else (
         echo Falha ao baixar o instalador do Node.js.
         exit /b
     )
 ) else (
     echo Node.js ja esta instalado.
-    start "" /D "%~dp0" run.bat
+    start "" /B "%~dp0\run.vbs" >nul 2>&1
 )
