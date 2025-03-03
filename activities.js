@@ -1,8 +1,8 @@
+
 const presence = {
     config: {
         details: 'Servidor Offline 🔴',
         state: 'ip: redeworth.com',
-        startTimestamp: Date.now(),
         largeImageKey: 'logo',
         largeImageText: '⭐ Venha fazer parte da Rede Worth você também ⭐',
         smallImageKey: 'spall_image',
@@ -85,17 +85,30 @@ const detectMinecraftClients = () => {
     });
 };
 
-module.exports.presence = async (nick) => {
+module.exports.presence = async (nick, configData) => {
+    if(nick !== "Desconhecido") {
+        if(configData.nickname === "Desconhecido");
+        else nick = configData.nickname;
+    }
+
     try {
         const clients = await detectMinecraftClients();
         const response = await fetch('https://api.mcsrvstat.us/3/redeworth.com');
         if (response.status === 200) {
             const data = await response.json();
-            presence.config.state = `ip: redeworth.com${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
+
+            if (configData.showTimeActivities === true || configData.showTimeActivities === "true") {
+                presence.config.startTimestamp = new Date(configData.editTimeActivitiesProfile).getTime();
+            } else {
+                presence.config.startTimestamp = new Date(configData.editTimeActivitiesProfile).getTime() + (24 * 60 * 60 * 1000);
+            }
+            if (configData.showClient === true || configData.showClient === "true") presence.config.state = `ip: redeworth.com${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}.`;
+            else presence.config.state = `ip: redeworth.com`;
+
             presence.config.details = data.motd ? data.motd.clean[0] : "Servidor Offline 🔴.";
             presence.config.buttons[0].label = data.motd ? "🟢 Conectar" : "🔴 Conectar";
 
-            if(String(data.motd.clean[0]).includes("Estamos em manutenção!")) presence.config.buttons[0].label = "🟡 Conectar";
+            if (String(data.motd.clean[0]).includes("Estamos em manutenção!")) presence.config.buttons[0].label = "🟡 Conectar";
 
             presence.config.partySize = data.motd ? data.players.online / 2 : 0;
             presence.config.partyMax = data.motd ? (data.players.online !== 0 ? data.players.max : 0) : 0;

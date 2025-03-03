@@ -7,7 +7,9 @@ const CLIENT_ID = '1325483160011804754';
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });
 
 let discordIsNotLog = false;
-let nickName = null;
+let nickName = process.env.NICKNAME || "DefaultNick"; // Pega o nick enviado pelo main.js
+
+console.log(`[DEBUG] - Nick registrado: ${nickName}`);
 
 async function verificarAtualizarVersao() {
   try {
@@ -46,10 +48,10 @@ async function exibirBanner() {
 
     const largura = 60;
     console.log(`\n\x1b[0;37m---------------------------------------------------------------\x1b[0m`);
-    console.log(`\x1b[0;36m${centralizarTexto('Criado por:', largura)}\x1b[0m`);
-    console.log(`\x1b[0;32m${centralizarTexto(data, largura)}\x1b[0m`);
+    console.log(`\x1b[0;36m${centralizarTexto('Criado por: vitorxp', largura)}\x1b[0m`);
+    // console.log(`\x1b[0;32m${centralizarTexto(data, largura)}\x1b[0m`);
     console.log(`\x1b[0;33m${centralizarTexto('Para a Rede Worth - Divulgação no Discord.', largura)}\x1b[0m`);
-    console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Editado: 24/02/2025`, largura)}\x1b[0m`);
+    console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Editado: 02/03/2025`, largura)}\x1b[0m`);
     console.log(`\x1b[0;37m---------------------------------------------------------------\x1b[0m\n`);
   });
 }
@@ -88,9 +90,15 @@ async function iniciarRPC() {
   }
 }
 
+process.stdin.on('data', (chunk) => {
+  const config = JSON.parse(chunk.toString().trim());
+  process.env.CONFIG_DATA = JSON.stringify(config);
+});
+
 async function atualizarAtividade() {
+  const configData = process.env.CONFIG_DATA ? JSON.parse(process.env.CONFIG_DATA) : {};
   if (!RPC) return;
-  RPC.setActivity(await presence.presence(nickName));
+  RPC.setActivity(await presence.presence(nickName, configData));
 }
 
 setTimeout(async () => { await exibirBanner() });
@@ -106,4 +114,4 @@ async function iniciar() {
   });
 }
 
-setTimeout(iniciar, 1000);
+setTimeout(async () => { await iniciarRPC() }, 1000);
