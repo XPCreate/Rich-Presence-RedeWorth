@@ -43,7 +43,7 @@ const createMainWindow = () => {
     }
   });
 
-  if (config.environment === "production") {
+  if (config.environment === "Production") {
     const menu = Menu.buildFromTemplate([]);
     Menu.setApplicationMenu(menu);
   }
