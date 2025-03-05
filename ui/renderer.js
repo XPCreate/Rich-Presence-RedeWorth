@@ -26,21 +26,36 @@ const formatTimeDifference = (timestamp) => {
 const formatMemoryUsage = (bytes) => `${(bytes / (1024 * 1024)).toFixed(2)}MiB de RAM`;
 
 const toggleElementsDisplay = (elements, display) => {
-    Array.from(elements).forEach(el => el.style.display = display);
+    Array.from(elements).forEach(el => el.style.transition = "0.3s");
+    Array.from(elements).forEach(el => el.style["animation-duration"] = "0.3s");
+    Array.from(elements).forEach(el => el.style.opacity = 0);
+
+    if (display === "block" || display === "flex") {
+        Array.from(elements).forEach(el => el.style.display = display);
+        setTimeout(() => {
+            Array.from(elements).forEach(el => el.style.opacity = 1);
+        }, 100)
+    } else if (display === "none") {
+        Array.from(elements).forEach(el => el.style.opacity = 0);
+        setTimeout(() => {
+            Array.from(elements).forEach(el => el.style.display = display);
+        }, 210)
+    }
 };
 
 const handleRPCAction = (action) => {
     const nickInput = document.getElementById("nick-input").value.trim();
     const elements = document.getElementsByClassName("wedfr-d3");
-    
+
     if (nickname === "") nickname = nickInput;
 
-    if (!nickname || nickname === " " || nickname === ""){
-        toggleElementsDisplay(elements, "flex");
+    if (!nickname || nickname === " " || nickname === "") {
+        showClientConfig()
         return;
     } else if (nickname.length < 3) {
         showError("Coloque um nickname maior que 3 letras.");
-        document.getElementById("nick-input").focus();
+        document.getElementById("editNick").focus()
+        showClientConfig()
         return;
     }
 
@@ -68,6 +83,7 @@ const handleRPCAction = (action) => {
 
     var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;
     var showClient = document.getElementById('showClient').checked;
+    var showPlayers = document.getElementById('showPlayers').checked;
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
 
     ipcRenderer.send(`${action}RPC`, nickname);
@@ -75,6 +91,7 @@ const handleRPCAction = (action) => {
     ipcRenderer.send(`config`, {
         editTimeActivitiesProfile,
         showClient,
+        showPlayers,
         showTimeActivities,
         nickname
     });
@@ -115,6 +132,7 @@ const checkForUpdates = async () => {
         const localVersion = `v${peq.version}`;
 
         if (localVersion !== latestVersion) {
+            if (Number(String(latestVersion).replaceAll(".", "").replace("v", "")) <= Number(String(localVersion).replaceAll(".", "").replace("v", ""))) { return; }
             downloadNewVersion = data.assets[0]?.browser_download_url;
             toggleElementsDisplay(document.getElementsByClassName("f43fd"), "block");
         } else {
@@ -126,6 +144,19 @@ const checkForUpdates = async () => {
     }
 };
 
+document.getElementById("showTimeActivities").addEventListener("click", function () {
+    var showTimeActivities = document.getElementById('showTimeActivities').checked;
+
+    if (showTimeActivities === true) {
+        document.getElementById('editTimeActivitiesProfile').disabled = false;
+    } else {
+        document.getElementById('editTimeActivitiesProfile').disabled = true;
+    }
+});
+document.getElementById('editNick').addEventListener('keyup', () => {
+    var nick = String(document.getElementById('editNick').value).slice();
+    document.getElementById('headNickname').src = `https://mc-heads.net/avatar/${nick}/16x16`;
+});
 document.getElementById('startRPC').addEventListener('click', () => handleRPCAction('start'));
 document.getElementById('startRPC2').addEventListener('click', () => handleRPCAction('start'));
 document.getElementById('reloadRPC').addEventListener('click', () => handleRPCAction('reload'));
@@ -136,11 +167,13 @@ document.getElementById('f43fd').addEventListener('click', () => {
 document.getElementById('saveConfig').addEventListener('click', () => {
     var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;
     var showClient = document.getElementById('showClient').checked;
+    var showPlayers = document.getElementById('showPlayers').checked;
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
     var nickInput = document.getElementById("editNick").value;
 
     if (nickInput.length < 3) {
         showError("Coloque um nickname maior que 3 letras.");
+        document.getElementById("editNick").focus()
         return;
     }
 
@@ -149,6 +182,7 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     ipcRenderer.send(`config`, {
         editTimeActivitiesProfile,
         showClient,
+        showPlayers,
         showTimeActivities,
         nickname
     });
@@ -157,14 +191,20 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     showError("Configurações salvas.");
 });
 document.getElementById('configButton').addEventListener('click', () => {
-    document.getElementById("editNick").value = nickname;
-    toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "flex");
+    showClientConfig()
 
 });
+
+function showClientConfig() {
+
+    document.getElementById("editNick").value = nickname;
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "flex");
+}
 
 ipcRenderer.on('terminal-output', (event, data) => {
     const terminalDiv = document.getElementById('terminal');
     const colors = {
+        "[0;31m": "red",
         "[0;33m": "#ffcc00",
         "[0;37m-": "#ffffff",
         "[0;36m ": "#00ffff",
@@ -184,8 +224,8 @@ ipcRenderer.on('versionAPP', (event, data) => {
 ipcRenderer.on('startRPC', () => {
     document.getElementById('reloadRPC').disabled = false;
     document.getElementById('stopRPC').disabled = false;
-    dateOnActivities = Date.now();
-    dateReloadStatus = 16;
+    dateOnActivities = Date.now() - 1000;
+    // dateReloadStatus = 16;
 
     let currentDate = new Date();
     let formattedDate = currentDate.toLocaleString("en-CA", {
@@ -199,6 +239,19 @@ ipcRenderer.on('startRPC', () => {
     }).replace(',', '');
 
     if (document.getElementById("editTimeActivitiesProfile").value === "" || document.getElementById("editTimeActivitiesProfile").value === " " || !document.getElementById("editTimeActivitiesProfile").value) document.getElementById("editTimeActivitiesProfile").value = formattedDate;
+
+    var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;
+    var showClient = document.getElementById('showClient').checked;
+    var showPlayers = document.getElementById('showPlayers').checked;
+    var showTimeActivities = document.getElementById('showTimeActivities').checked;
+
+    ipcRenderer.send(`config`, {
+        editTimeActivitiesProfile,
+        showClient,
+        showPlayers,
+        showTimeActivities,
+        nickname
+    });
 });
 
 ipcRenderer.on('MemoryUsed', (event, data) => {
@@ -209,10 +262,14 @@ ipcRenderer.on('activities-minecraft', (event, data) => {
     dateOnActivitieMinecraft = data;
 })
 
+ipcRenderer.on('activities-reload-time-active', (event, data) => {
+    dateReloadStatus = data;
+})
+
 setInterval(() => {
     if (dateOnActivities) {
         document.getElementById('dateOnActivities').textContent = formatTimeDifference(dateOnActivities);
-        if (!dateReloadStatus) dateReloadStatus = 16;
+        if (!dateReloadStatus) dateReloadStatus = 15;
     } else {
         document.getElementById('dateOnActivities').textContent = "Ainda não foi iniciado..."
     }
@@ -224,8 +281,8 @@ setInterval(() => {
     }
 
     if (dateReloadStatus) {
-        dateReloadStatus--;
         document.getElementById('dateReloadStatus').textContent = `${dateReloadStatus}s`;
+        dateReloadStatus--;
     } else {
         document.getElementById('dateReloadStatus').textContent = "Nenhum";
     }
@@ -235,6 +292,7 @@ setTimeout(updateServerInfo, 1000);
 setInterval(updateServerInfo, 10000);
 
 setTimeout(checkForUpdates, 1900);
+setInterval(checkForUpdates, 30000);
 
 document.addEventListener('keydown', (event) => {
     if (event.key === "Escape") {

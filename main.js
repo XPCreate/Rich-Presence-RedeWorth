@@ -5,9 +5,12 @@ const peq = require('./package.json');
 const config = require('./config');
 
 const formatText = (text) => text.replace(/\n/g, '<br>');
-let beforeRPCProcess = false;
 
+let beforeRPCProcess = false;
 let mainWindow, rpcProcess, splashWindow;
+
+var nickname = "";
+var backupConfig;
 
 const getCurrentDate = () => {
   const currentDate = new Date();
@@ -56,7 +59,7 @@ const createMainWindow = () => {
   }
 
   mainWindow.loadFile('ui/index.html');
-  
+
   const interval = setInterval(() => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('versionAPP', `v${peq.version}`);
@@ -99,6 +102,19 @@ const handleRPCProcessOutput = (data) => {
     mainWindow.webContents.send('activities-minecraft', Date.now());
   } else if (output.includes("[DEBUG] - Minecraft foi fechado!")) {
     mainWindow.webContents.send('activities-minecraft', 0);
+  }
+
+  if (output.includes("[DEBUG] - Atividade personalizada ativada (atualização a cada 15s)")) {
+    mainWindow.webContents.send('activities-reload-time-active', 15);
+  }
+
+  if (output.includes("[DEBUG] - Discord desconectado, tentando reconectar...")) {
+    var intervalV = setInterval(() => {
+      stopRPCProcess()
+      startRPCProcess(nickname)
+      if (rpcProcess) rpcProcess.stdin.write(JSON.stringify(data) + '\n');
+      clearInterval(intervalV);
+    }, 5000)
   }
 
   mainWindow.webContents.send('terminal-output', formatText(output));
@@ -146,10 +162,12 @@ const initializeApp = () => {
     }, 800);
   }, 3000);
 
-  ipcMain.on('startRPC', (event, nick) => startRPCProcess(nick));
+  ipcMain.on('startRPC', (event, nick) => { startRPCProcess(nick); nickname === nick });
   ipcMain.on('stopRPC', stopRPCProcess);
   ipcMain.on('config', (event, data) => {
+    // if (data.nickname) nickname = data.nickname;
     if (rpcProcess) rpcProcess.stdin.write(JSON.stringify(data) + '\n');
+    // backupConfig = JSON.stringify(data);
   });
 
   app.on('window-all-closed', () => {

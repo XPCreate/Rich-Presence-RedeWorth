@@ -1,15 +1,31 @@
 {
   "name": "rich-presence-redeworth",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "",
   "main": "src/index.js",
   "bin": "src/index.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "package": "electron-builder"
   },
   "build": {
     "appId": "com.vitorxp.rich-presence-redeworth",
-    "icon": "image/749a8e803f7abea1f44bce4832b18d75.ico"
+    "productName": "Discord Rich Presence Rede Worth",
+    "icon": "image/749a8e803f7abea1f44bce4832b18d75.png",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "signingHashAlgorithms": [],
+      "publisherName": null
+    },
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   },
   "keywords": [
     "discord-rich-presence",
@@ -22,6 +38,7 @@
   "author": "vitorxp",
   "license": "ISC",
   "dependencies": {
+    "7zip-bin": "^5.2.0",
     "axios": "^1.7.9",
     "discord-rpc": "^4.0.1",
     "discord.js": "^14.17.3",
@@ -43,8 +60,13 @@
     ]
   },
   "devDependencies": {
+    "@electron/rebuild": "^3.7.1",
     "@types/discord-rpc": "^4.0.8",
-    "electron": "^34.3.0"
+    "app-builder-bin": "^5.0.0-alpha.10",
+    "app-builder-lib": "^25.1.8",
+    "electron": "^34.3.0",
+    "electron-builder": "^24.0.0",
+    "electron-packager": "^17.1.2"
   },
   "homepage": "https://github.com/XPCreate/Rich-Presence-RedeWorth#readme",
   "repository": {

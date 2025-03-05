@@ -1419,7 +1419,7 @@ div.wedfr {
     justify-content: center;
     align-items: center;
     position: fixed;
-    background-color: #070e1ba9;
+    background-color: #050a13;
 }
 
 input.d34d4 {
@@ -1479,6 +1479,12 @@ span.f43fd {
     font-size: 24px;
     padding: 0px 15px;
     cursor: pointer;
+}
+
+input.fer3:disabled {
+    background-color: #00000018;
+    color: #949494c0;
+    cursor: no-drop;
 }
 
 /* div.de23 {
@@ -1694,6 +1700,8 @@ input:checked+.slider:before {
 }
 
 input.fer3 {
+    transition: 0.3s;
+    animation-duration: 0.3;
     color: #fafafa;
     background-color: #293952;
     border: none;

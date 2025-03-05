@@ -48,56 +48,68 @@
             </div>
         </div>
         <div class="wedfr-d3f4" id="config" style="display: none;">
-            <div class="fd4tr" style="gap: 3px;">
-                <h1 style="margin-bottom: 10px;">Configurações:</h1>
-                <div class="werf4">
-                    <div>
-                        <h1>Mostrar o Client aberto no Status</h1>
+            <form onsubmit="return false;">
+                <div class="fd4tr" style="gap: 3px;">
+                    <h1 style="margin-bottom: 10px;">Configurações:</h1>
+                    <div class="werf4">
+                        <div>
+                            <h1>Mostrar Qual Cliente Você Está Jogando</h1>
+                        </div>
+                        <div>
+                            <label class="switch mt-[8px]">
+                                <input type="checkbox" id="showClient" checked>
+                                <div class="slider round"></div>
+                            </label>
+                        </div>
                     </div>
-                    <div>
-                        <label class="switch mt-[8px]">
-                            <input type="checkbox" name="warn-type" id="showClient" checked>
-                            <div class="slider round"></div>
-                        </label>
+                    <div class="werf4">
+                        <div>
+                            <h1>Mostrar Tempo da Atividade</h1>
+                        </div>
+                        <div>
+                            <label class="switch mt-[8px]">
+                                <input type="checkbox" id="showTimeActivities" checked>
+                                <div class="slider round"></div>
+                            </label>
+                        </div>
                     </div>
+                    <div class="werf4">
+                        <div>
+                            <h1>Mostrar Jogadores</h1>
+                        </div>
+                        <div>
+                            <label class="switch mt-[8px]">
+                                <input type="checkbox"  id="showPlayers" checked>
+                                <div class="slider round"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="werf4">
+                        <div>
+                            <h1>Alterar Tempo da Atividade</h1>
+                        </div>
+                        <div>
+                            <input class="fer3" type="datetime-local" id="editTimeActivitiesProfile">
+                        </div>
+                    </div>
+                    <div class="werf4">
+                        <div>
+                            <h1>Seu Nickname do Minecraft</h1>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <input class="fer3" type="text" id="editNick"><img id="headNickname" src="https://mc-heads.net/avatar/usrergf/16x16" alt="Head">
+                        </div>
+                    </div>
+                    <button class="fedg" id="saveConfig">
+                        <i class="fas fa-save"></i> Salvar Configurações
+                    </button>
                 </div>
-                <div class="werf4">
-                    <div>
-                        <h1>Mostrar Tempo da Atividade</h1>
-                    </div>
-                    <div>
-                        <label class="switch mt-[8px]">
-                            <input type="checkbox" name="warn-type" id="showTimeActivities" checked>
-                            <div class="slider round"></div>
-                        </label>
-                    </div>
-                </div>
-                <div class="werf4">
-                    <div>
-                        <h1>Tempo da Atividade Ativa</h1>
-                    </div>
-                    <div>
-                        <input class="fer3" type="datetime-local" id="editTimeActivitiesProfile">
-                    </div>
-                </div>
-                <div class="werf4">
-                    <div>
-                        <h1>Seu Nick</h1>
-                    </div>
-                    <div>
-                        <input class="fer3" type="text" id="editNick">
-                    </div>
-                </div>
-                <button class="fedg" id="saveConfig">
-                    <i class="fas fa-save"></i> Salvar Configurações
-                </button>
-            </div>
+            </form>
         </div>
         <div class="wedfr3">
             <span id="versionAPP">v0.0.0</span>
         </div>
-        <!-- <div class="de23">
-        </div> -->
+
         <div style="display: flex; width: 100%; height: 100hv; align-items: center; position: fixed;" id="ndasc"></div>
         <nav class="navbar">
             <div>
