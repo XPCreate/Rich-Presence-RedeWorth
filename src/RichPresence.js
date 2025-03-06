@@ -2,7 +2,7 @@ const figlet = require('figlet');
 // const fetch = require('node-fetch');
 const peq = require('../package.json');
 const DiscordRPC = require('discord-rpc');
-const presence = require('../activities.js');
+const presence = require('./events/activities');
 const CLIENT_ID = '1325483160011804754';
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });
 
@@ -101,6 +101,7 @@ async function iniciarRPC() {
   
     } catch (error) {
       console.error("Erro ao processar JSON:", error.message);
+      console.error(error);
     }
   });
 

@@ -3,18 +3,15 @@ setlocal enabledelayedexpansion
 
 echo Verificando se o Node.js está instalado...
 
-:: Verifica se o Node.js está instalado
 node -v >nul 2>&1
 if %errorlevel% neq 0 (
     echo Node.js nao encontrado. Iniciando instalacao...
     goto instalar
 )
 
-:: Obtém a versão do Node.js instalada
 for /f "delims=" %%v in ('node -v') do set NODE_VERSION=%%v
 set NODE_VERSION=%NODE_VERSION:~1%
 
-:: Separa a versão em major.minor.patch
 for /f "tokens=1-3 delims=." %%a in ("%NODE_VERSION%") do (
     set MAJOR=%%a
     set MINOR=%%b
@@ -23,7 +20,6 @@ for /f "tokens=1-3 delims=." %%a in ("%NODE_VERSION%") do (
 
 echo Versao instalada: %NODE_VERSION%
 
-:: Compara a versão com 20.8.0
 if %MAJOR% LSS 20 (
     echo Versao muito antiga. Atualizando...
     goto instalar

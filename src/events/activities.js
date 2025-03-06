@@ -77,7 +77,11 @@ module.exports.presence = async (nick, configData) => {
     try {
         const clients = await detectMinecraftClients();
         const response = await fetch('https://api.mcsrvstat.us/3/redeworth.com');
-        if (!response.ok) throw new Error('Falha ao conectar ao Minecraft Status API.');
+
+        if (!response.ok) {
+            console.log('[DEBUG_LOG] - Falha ao conectar ao Minecraft Status API, mesmo assim estamos enviado os dados salvos anteriormente.');
+            return presence.config;
+        }
 
         const data = await response.json();
         presence.config.startTimestamp = (configData.showTimeActivities === true) ?

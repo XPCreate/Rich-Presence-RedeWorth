@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Verifica se o Node.js está instalado
 if ! command -v node &> /dev/null
 then
     echo "Node.js não encontrado. Baixando e instalando..."

@@ -803,25 +803,13 @@
 @font-face {
     font-family: Heavitas;
 
-    src: url(/fonts/Heavitas.ttf);
+    src: url(/src/ui/fonts/Heavitas.ttf);
 
     font-weight: 400;
 
     font-style: normal;
 
     font-display: swap
-}
-
-@font-face {
-    font-family: Source Code Pro;
-
-    font-style: normal;
-
-    font-weight: 400;
-
-    font-display: swap;
-
-    src: url(/fonts/Source-Code-Pro-Regular.woff2) format("woff2")
 }
 
 @font-face {

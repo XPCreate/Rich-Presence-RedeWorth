@@ -1,40 +1,43 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# Atividade RedeWorth `v1.9.4`  
-### 🚀 Apenas para fins de divulgação  
+# 🎮 Atividade RedeWorth `v1.9.5`  
+### 🚀 Exclusivo para divulgação da RedeWorth  
 
-## Atualizações:
-- Alterado sistema de configuração, para apenas mostrar uma só ao inves de duas.
-- Alterado comportamento de algumas funções quando clicadas.
-- Adicionado animações.
-- Designer de algumas funções foram alteradas.
-- Sistema de atualizações refeito.
-- Agora você consegue esconder o total de jogadores.
-- Reconexão automatica caso o Discord reinicie ou atualize.
-----------------------------------------------------------------
+## 📌 Novidades e Melhorias  
 
-### 🎨 Personalização aprimorada  
-Você tem controle total sobre a atividade exibida no Discord! No novo painel, é possível:  
-✅ Alterar o tempo da atividade.  
-✅ Ocultar o cliente em uso.  
-✅ Desativar a exibição do tempo da atividade aberta.  
+🔹 **Reestruturação de pastas**  
+- Algumas pastas foram renomeadas e reorganizadas para melhor organização do código.  
+- A pasta `start` agora se chama `systems`, refletindo melhor sua funcionalidade.  
 
-Agora, através desse painel, você pode **iniciar, reiniciar, parar e entre muitas coisas**, isso de forma simples e pratica!  
+🔹 **Otimizações no código**  
+- Melhorias gerais na performance e eficiência do código.  
+
+🔹 **Novo sistema de logs**  
+- Agora, todas as atividades do programa serão registradas automaticamente em logs, facilitando a identificação de problemas.  
+
+🔹 **Correção de erro no Rich Presence**  
+- O bug que fazia o Rich Presence apresentar erro no terminal ao reiniciar o Discord foi corrigido.  
+
+🔹 **Fechamento aprimorado**  
+- Agora, ao clicar no "X" para fechar a aplicação, ela não exibirá mais a confirmação de saída. Em vez disso, o programa será minimizado para a bandeja do sistema, permitindo que continue rodando em segundo plano.  
+
+---
 
 ![image](https://i.imgur.com/oN47hBH.png)  
 
-<video src="https://i.imgur.com/o8SqkyM.mp4" controls width="500"></video>  
-- Video: https://i.imgur.com/o8SqkyM.mp4
+## 🔹 Compatível com Windows e Linux  
 
-## 🔹 Suporte para Windows e Linux
-1️⃣ Extraia os arquivos para uma pasta.  
-2️⃣ Acesse a pasta `start`.  
-3️⃣ Escolha a pasta do seu sistema operacional.  
-4️⃣ Execute o arquivo `setup`. Caso o **Node.js** não esteja instalado, ele será instalado automaticamente. Após a instalação, o sistema será iniciado.  
-5️⃣ Para abrir novamente no futuro, execute o arquivo `run`.  
+### 🛠️ Como instalar e rodar:  
+1️⃣ Extraia os arquivos para uma pasta de sua preferência.  
+2️⃣ Acesse a pasta `systems`.  
+3️⃣ Escolha a subpasta correspondente ao seu sistema operacional.  
+4️⃣ Execute o arquivo `setup`. Se o **Node.js** não estiver instalado, ele será instalado automaticamente. Após a instalação, o sistema será iniciado.  
+5️⃣ Para abrir novamente no futuro, basta executar o arquivo `run`.  
 
-✅ **Pronto!** O sistema estará rodando.  
+✅ **Tudo pronto!** O Rich Presence estará funcionando perfeitamente.  
 
-## 🎉 Agradecimentos especiais  
-💻 `gabsil_` – Web design  
-🔍 `ShimizuMimi` – Testes de bugs  
+---
+
+## 🎉 Agradecimentos Especiais  
+💻 `gabsil_` – Design da interface web
+🔍 `ShimizuMimi` – Testes e correção de bugs

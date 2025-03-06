@@ -1,30 +1,32 @@
 {
   "name": "rich-presence-redeworth",
-  "version": "1.9.4",
-  "description": "",
+  "productName": "Discord Rich Presence Rede Worth",
+  "version": "1.9.5",
+  "description": "Status personalizado do Discord, para fins de divulgação do servidor Rede Worth.",
   "main": "src/index.js",
   "bin": "src/index.js",
   "scripts": {
-    "start": "electron main.js",
-    "package": "electron-builder"
+    "start": "electron src/LauncherRichPresence.js"
   },
   "build": {
     "appId": "com.vitorxp.rich-presence-redeworth",
     "productName": "Discord Rich Presence Rede Worth",
-    "icon": "image/749a8e803f7abea1f44bce4832b18d75.png",
-    "directories": {
-      "output": "dist"
-    },
+    "icon": "./src/ui/image/749a8e803f7abea1f44bce4832b18d75.png",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "XPCreate",
+        "repo": "Rich-Presence-RedeWorth"
+      }
+    ],
     "win": {
       "target": "nsis",
-      "signingHashAlgorithms": [],
-      "publisherName": null
-    },
-    "mac": {
-      "category": "public.app-category.productivity"
+      "icon": "./src/ui/image/749a8e803f7abea1f44bce4832b18d75.png",
+      "artifactName": "${productName}-${version}-setup.${ext}"
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "icon": "./src/ui/image/749a8e803f7abea1f44bce4832b18d75.png"
     }
   },
   "keywords": [
@@ -38,10 +40,10 @@
   "author": "vitorxp",
   "license": "ISC",
   "dependencies": {
-    "7zip-bin": "^5.2.0",
     "axios": "^1.7.9",
     "discord-rpc": "^4.0.1",
     "discord.js": "^14.17.3",
+    "electron-updater": "^6.3.9",
     "figlet": "^1.8.0",
     "node-fetch": "^3.3.2",
     "ps-list": "^8.1.1",
@@ -60,13 +62,8 @@
     ]
   },
   "devDependencies": {
-    "@electron/rebuild": "^3.7.1",
     "@types/discord-rpc": "^4.0.8",
-    "app-builder-bin": "^5.0.0-alpha.10",
-    "app-builder-lib": "^25.1.8",
-    "electron": "^34.3.0",
-    "electron-builder": "^24.0.0",
-    "electron-packager": "^17.1.2"
+    "electron": "^34.3.0"
   },
   "homepage": "https://github.com/XPCreate/Rich-Presence-RedeWorth#readme",
   "repository": {
