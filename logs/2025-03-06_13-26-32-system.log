@@ -1,0 +1,55 @@
+[2025-03-06T13:26:32.430Z] [LOG] [DEBUG_LOG] - Log do terminal sendo registrada com sucesso para D:\indeza1r\DiscordStatus
+[2025-03-06T13:26:32.431Z] [LOG] [DEBUG_LOG] - Iniciando sistemas...
+[2025-03-06T13:26:32.530Z] [LOG] [DEBUG_LOG] - Inicializando janela de carregamento.
+[2025-03-06T13:26:32.709Z] [LOG] [DEBUG_LOG] - Janela de carregamento inicializada.
+[2025-03-06T13:26:32.710Z] [INFO] Skip checkForUpdates because application is not packed and dev update config is not forced
+[2025-03-06T13:26:32.710Z] [DEBUG] checkForUpdatesAndNotify called, downloadPromise is null
+[2025-03-06T13:26:32.530Z] [LOG] [DEBUG_LOG] - Inicializando aplicação...
+[2025-03-06T13:26:35.722Z] [LOG] [DEBUG_LOG] - Inicializando janela principal.
+[2025-03-06T13:26:35.833Z] [LOG] [DEBUG_LOG] - Aplicação iniciada em modo de Development
+[2025-03-06T13:26:35.867Z] [LOG] [DEBUG_LOG] - Janela principal inicializada.
+[2025-03-06T13:26:36.147Z] [LOG] [DEBUG_LOG] - Ícone da bandeja configurado com sucesso.
+[2025-03-06T13:26:35.868Z] [LOG] [DEBUG_LOG] - Criando ícone da bandeja...
+[2025-03-06T13:26:52.586Z] [LOG] [DEBUG_LOG] - Iniciando RPC...
+[2025-03-06T13:26:52.639Z] [LOG] [DEBUG_LOG] - Nome do jogador:  
+[2025-03-06T13:26:52.639Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:26:52.639Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:26:52","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":""}
+[2025-03-06T13:26:52.765Z] [LOG] [DEBUG] - Nick registrado: DefaultNick
+[2025-03-06T13:26:52.969Z] [LOG] [💎] Você já está na versão mais recente, uma que nem existe no meu sistema ainda ;-; (seu abuser)
+[2025-03-06T13:26:53.074Z] [LOG] ---------------------------------------------------------------
+[2025-03-06T13:26:53.104Z] [LOG]                          Criado por: vitorxp
+[2025-03-06T13:26:53.120Z] [LOG]               Para a Rede Worth - Divulgação no Discord.
+[2025-03-06T13:26:53.135Z] [LOG]                  Versão: 1.9.5 - Editado: 05/03/2025
+[2025-03-06T13:26:53.150Z] [LOG] --------------------------------------------------------- ------
+[2025-03-06T13:26:53.776Z] [LOG] [DEBUG] - Discord RPC Iniciado.
+[2025-03-06T13:26:53.792Z] [LOG] [DEBUG] - Atividade personalizada ativada (atualização a cada 15s)
+[2025-03-06T13:26:57.672Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:26:57.673Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:26:57.673Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:26:52","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:28:01.276Z] [LOG] [DEBUG_LOG] - Status do RPC parado.
+[2025-03-06T13:28:01.276Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:28:01.276Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:28:01.276Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:26:52","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:28:01.284Z] [LOG] [DEBUG] - RPC encerrado.
+[2025-03-06T13:28:12.248Z] [LOG] [DEBUG_LOG] - Iniciando RPC...
+[2025-03-06T13:28:12.252Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:28:12.252Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:28:12.252Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:26:52","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:28:12.252Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:28:12.253Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:26:52","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:28:12.253Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:28:12.425Z] [LOG] [DEBUG] - Nick registrado: vitorxp
+[2025-03-06T13:28:12.593Z] [LOG] [💎] Você já está na versão mais recente, uma que nem existe no meu sistema ainda ;-; (seu abuser)
+[2025-03-06T13:28:12.698Z] [LOG] ---------------------------------------------------------------
+[2025-03-06T13:28:12.714Z] [LOG]                          Criado por: vitorxp
+[2025-03-06T13:28:12.745Z] [LOG]               Para a Rede Worth - Divulgação no Discord.
+[2025-03-06T13:28:12.761Z] [LOG]                  Versão: 1.9.5 - Editado: 05/03/2025
+[2025-03-06T13:28:12.776Z] [LOG] --------------------------------------------------------- ------
+[2025-03-06T13:28:13.433Z] [LOG] [DEBUG] - Discord RPC Iniciado.
+[2025-03-06T13:28:13.439Z] [LOG] [DEBUG] - Atividade personalizada ativada (atualização a cada 15s)
+[2025-03-06T13:28:15.969Z] [LOG] [DEBUG_LOG] - Status do RPC parado.
+[2025-03-06T13:28:15.969Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:28:15.969Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:28:15.969Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:26:52","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:28:15.981Z] [LOG] [DEBUG] - RPC encerrado.
+[2025-03-06T13:28:22.746Z] [LOG] [DEBUG_LOG] - Saindo da aplicação.

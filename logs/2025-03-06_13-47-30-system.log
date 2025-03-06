@@ -1,0 +1,31 @@
+[2025-03-06T13:47:30.659Z] [LOG] [DEBUG_LOG] - Log do terminal sendo registrada com sucesso para D:\indeza1r\DiscordStatus
+[2025-03-06T13:47:30.660Z] [LOG] [DEBUG_LOG] - Iniciando sistemas...
+[2025-03-06T13:47:30.713Z] [LOG] [DEBUG_LOG] - Inicializando aplicação...
+[2025-03-06T13:47:30.714Z] [LOG] [DEBUG_LOG] - Inicializando janela de carregamento.
+[2025-03-06T13:47:30.841Z] [INFO] Skip checkForUpdates because application is not packed and dev update config is not forced
+[2025-03-06T13:47:30.840Z] [LOG] [DEBUG_LOG] - Janela de carregamento inicializada.
+[2025-03-06T13:47:30.842Z] [DEBUG] checkForUpdatesAndNotify called, downloadPromise is null
+[2025-03-06T13:47:33.847Z] [LOG] [DEBUG_LOG] - Inicializando janela principal.
+[2025-03-06T13:47:34.024Z] [LOG] [DEBUG_LOG] - Janela principal inicializada.
+[2025-03-06T13:47:34.025Z] [LOG] [DEBUG_LOG] - Criando ícone da bandeja...
+[2025-03-06T13:47:33.925Z] [LOG] [DEBUG_LOG] - Aplicação iniciada em modo de Production
+[2025-03-06T13:47:34.086Z] [LOG] [DEBUG_LOG] - Ícone da bandeja configurado com sucesso.
+[2025-03-06T13:47:46.244Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:47:46.244Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:47:46.244Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:47:47.066Z] [LOG] [DEBUG_LOG] - Iniciando RPC...
+[2025-03-06T13:47:47.078Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:47:47.078Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:47:47.078Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:47:47.110Z] [LOG] [DEBUG_LOG] - Configurações salvas com sucesso.
+[2025-03-06T13:47:47.110Z] [LOG] [DEBUG_LOG] - Configurações:  {"editTimeActivitiesProfile":"2025-03-06T10:47:47","showClient":true,"showPlayers":true,"showTimeActivities":true,"nickname":"vitorxp"}
+[2025-03-06T13:47:47.110Z] [LOG] [DEBUG_LOG] - Nome do jogador:  vitorxp
+[2025-03-06T13:47:47.213Z] [LOG] [DEBUG] - Nick registrado: vitorxp
+[2025-03-06T13:47:47.402Z] [LOG] [💎] Você já está na versão mais recente, uma que nem existe no meu sistema ainda ;-; (seu abuser)
+[2025-03-06T13:47:47.508Z] [LOG] ---------------------------------------------------------------
+[2025-03-06T13:47:47.537Z] [LOG]                          Criado por: vitorxp
+[2025-03-06T13:47:47.551Z] [LOG]               Para a Rede Worth - Divulgação no Discord.
+[2025-03-06T13:47:47.567Z] [LOG]                  Versão: 1.9.5 - Editado: 05/03/2025
+[2025-03-06T13:47:47.583Z] [LOG] --------------------------------------------------------- ------
+[2025-03-06T13:47:48.224Z] [LOG] [DEBUG] - Discord RPC Iniciado.
+[2025-03-06T13:47:48.251Z] [LOG] [DEBUG] - Atividade personalizada ativada (atualização a cada 15s)
