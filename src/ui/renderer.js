@@ -1,6 +1,8 @@
 const { ipcRenderer } = require('electron');
 const peq = require("../../package.json");
 
+
+let csfg = false;
 let downloadNewVersion;
 let dateOnActivities = 0;
 let dateReloadStatus = 0;
@@ -188,6 +190,7 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     });
 
     toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "none");
+    csfg=false
     showError("Configurações salvas.");
 });
 document.getElementById('configButton').addEventListener('click', () => {
@@ -195,8 +198,26 @@ document.getElementById('configButton').addEventListener('click', () => {
 
 });
 
-function showClientConfig() {
+document.getElementById('configAppButton').addEventListener('click', () => {
+    csfg = true
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "flex");
+});
 
+document.getElementById('closeConfigApp').addEventListener('click', () => {
+    csfg = false
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "none");
+});
+
+document.getElementById("minimizeToTray").addEventListener("click", function () {
+    var minimizeToTray = document.getElementById('minimizeToTray').checked;
+
+    ipcRenderer.send(`configApp`, {
+        minimizeToTray
+    });
+});
+
+function showClientConfig() {
+    csfg = true;
     document.getElementById("editNick").value = nickname;
     toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "flex");
 }
@@ -266,6 +287,31 @@ ipcRenderer.on('activities-reload-time-active', (event, data) => {
     dateReloadStatus = data;
 })
 
+ipcRenderer.on('config', (event, data) => {
+    if(csfg === true) return;
+
+    var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;
+    var showClient = document.getElementById('showClient').checked;
+    var showPlayers = document.getElementById('showPlayers').checked;
+    var showTimeActivities = document.getElementById('showTimeActivities').checked;
+
+    if (nickname !== data.nickname) nickname = data.nickname;
+    if (nickname !== data.nickname) document.getElementById('editNick').value = nickname;
+    if (showClient !== data.showClient) document.getElementById('showClient').checked = data.showClient;
+    if (showPlayers !== data.showPlayers) document.getElementById('showPlayers').checked = data.showPlayers;
+    if (showTimeActivities !== data.showTimeActivities) document.getElementById('showTimeActivities').checked = data.showTimeActivities;
+    if (editTimeActivitiesProfile !== data.editTimeActivitiesProfile) document.getElementById("editTimeActivitiesProfile").value = data.editTimeActivitiesProfile
+    document.getElementById('headNickname').src = `https://mc-heads.net/avatar/${data.nickname}/16x16`;
+})
+
+ipcRenderer.on('configApp', (event, data) => {
+    if(csfg === true) return;
+
+    var minimizeToTray = document.getElementById('minimizeToTray').checked;
+
+    if (minimizeToTray !== data.minimizeToTray) document.getElementById('minimizeToTray').checked = data.minimizeToTray;
+})
+
 setInterval(() => {
     if (dateOnActivities) {
         document.getElementById('dateOnActivities').textContent = formatTimeDifference(dateOnActivities);
@@ -298,5 +344,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === "Escape") {
         toggleElementsDisplay(document.getElementsByClassName("wedfr-d3"), "none");
         toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "none");
+        csfg=false
+        toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "none");
     }
 });

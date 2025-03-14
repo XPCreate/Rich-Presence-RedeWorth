@@ -51,7 +51,7 @@ async function exibirBanner() {
     setTimeout(() => {console.log(`\n\x1b[0;37m---------------------------------------------------------------\x1b[0m`);}, 100)
     setTimeout(() => {console.log(`\x1b[0;36m${centralizarTexto('Criado por: vitorxp', largura)}\x1b[0m`);}, 120)
     setTimeout(() => {console.log(`\x1b[0;33m${centralizarTexto('Para a Rede Worth - Divulgação no Discord.', largura)}\x1b[0m`);}, 140)
-    setTimeout(() => {console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Editado: 05/03/2025`, largura)}\x1b[0m`);}, 160)
+    setTimeout(() => {console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Editado: 14/03/2025`, largura)}\x1b[0m`);}, 160)
     setTimeout(() => {console.log(`\x1b[0;37m--------------------------------------------------------- ------\x1b[0m\n`);}, 180)
 }
 

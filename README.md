@@ -1,25 +1,16 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# 🎮 Atividade RedeWorth `v1.9.5`  
+# 🎮 Atividade RedeWorth `v1.9.6`  
 ### 🚀 Exclusivo para divulgação da RedeWorth  
 
 ## 📌 Novidades e Melhorias  
 
-🔹 **Reestruturação de pastas**  
-- Algumas pastas foram renomeadas e reorganizadas para melhor organização do código.  
-- A pasta `start` agora se chama `systems`, refletindo melhor sua funcionalidade.  
+🔹 **📁 Salvamento Automático**  
+- Agora, suas configurações são salvas automaticamente em um arquivo, evitando que você tenha que reconfigurar tudo manualmente a cada uso! *(Sugerido por: `Neto33rec`)*  
+- Adicionamos uma nova aba de configurações dedicada ao controle do aplicativo, tornando a personalização ainda mais prática.  
 
-🔹 **Otimizações no código**  
-- Melhorias gerais na performance e eficiência do código.  
-
-🔹 **Novo sistema de logs**  
-- Agora, todas as atividades do programa serão registradas automaticamente em logs, facilitando a identificação de problemas.  
-
-🔹 **Correção de erro no Rich Presence**  
-- O bug que fazia o Rich Presence apresentar erro no terminal ao reiniciar o Discord foi corrigido.  
-
-🔹 **Fechamento aprimorado**  
-- Agora, ao clicar no "X" para fechar a aplicação, ela não exibirá mais a confirmação de saída. Em vez disso, o programa será minimizado para a bandeja do sistema, permitindo que continue rodando em segundo plano.  
+🔹 **🎨 Melhorias no Design**  
+- Reformulamos diversos botões da aplicação para um visual mais moderno e intuitivo.  
 
 ---
 
