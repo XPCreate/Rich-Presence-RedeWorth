@@ -1,12 +1,15 @@
 {
   "name": "rich-presence-redeworth",
   "productName": "Discord Rich Presence Rede Worth",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "Status personalizado do Discord, para fins de divulgação do servidor Rede Worth.",
-  "main": "src/index.js",
-  "bin": "src/index.js",
+  "main": "src/LauncherRichPresence.js",
+  "bin": "src/LauncherRichPresence.js",
   "scripts": {
-    "start": "electron src/LauncherRichPresence.js"
+    "start": "electron src/LauncherRichPresence.js",
+    "build": "electron-builder",
+    "dist": "electron-builder --win --x64",
+    "publish": "electron-builder --publish=always"
   },
   "build": {
     "appId": "com.vitorxp.rich-presence-redeworth",
@@ -40,12 +43,8 @@
   "author": "vitorxp",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.9",
     "discord-rpc": "^4.0.1",
-    "discord.js": "^14.17.3",
     "electron-updater": "^6.3.9",
-    "figlet": "^1.8.0",
-    "node-fetch": "^3.3.2",
     "ps-list": "^8.1.1",
     "rich-presence-redeworth": "file:"
   },

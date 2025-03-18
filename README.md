@@ -1,16 +1,17 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# 🎮 Atividade RedeWorth `v1.9.6`  
+# 🎮 Atividade RedeWorth `v1.9.7`  
 ### 🚀 Exclusivo para divulgação da RedeWorth  
 
 ## 📌 Novidades e Melhorias  
 
-🔹 **📁 Salvamento Automático**  
-- Agora, suas configurações são salvas automaticamente em um arquivo, evitando que você tenha que reconfigurar tudo manualmente a cada uso! *(Sugerido por: `Neto33rec`)*  
-- Adicionamos uma nova aba de configurações dedicada ao controle do aplicativo, tornando a personalização ainda mais prática.  
+🔹 **Desempenho**  
+- Reduzimos o consumo excessivo de RAM, tornando o aplicativo mais leve.  
+- Melhoramos o tempo de inicialização, deixando o carregamento mais rápido.  
 
-🔹 **🎨 Melhorias no Design**  
-- Reformulamos diversos botões da aplicação para um visual mais moderno e intuitivo.  
+🔹 **Código**  
+- Otimizamos grande parte do código para um desempenho mais eficiente.  
+- Adicionamos novos logs para facilitar a depuração e rastreamento de erros.  
 
 ---
 

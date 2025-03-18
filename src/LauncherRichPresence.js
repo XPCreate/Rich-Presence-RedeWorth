@@ -1,68 +1,38 @@
-const { app, BrowserWindow, ipcMain, Menu, dialog, Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const peq = require('../package.json');
 const config = require('./configFile');
-const { autoUpdater } = require('electron-updater');
 const { db } = require('./plugins/dataDB');
 require("./plugins/terminalLogInfo");
-console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso para ' + path.join(path.dirname(process.cwd())));
+
+console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', path.dirname(process.cwd()));
 console.log("[DEBUG_LOG] - Iniciando sistemas...");
 
 let mainWindow, rpcProcess, splashWindow, tray;
-
-let nickname = db.rich.get("configRichPresence/nickname") ?? "", backupConfig;
-let beforeRPCProcess = false;
+let nickname = db.rich.get("configRichPresence/nickname") ?? "";
 let tryAgain = false;
-let noAgain = false;
+let noAgain = db.get("config/minimizeToTray") === false;
 
-if (db.get("config/minimizeToTray") === true) noAgain = false;
-if (db.get("config/minimizeToTray") === false) noAgain = true;
-
-const formatText = (text) => text.replace(/\n/g, '<br>');
-const formatTextc = (text) => text.replace(/\n/g, '');
+const formatText = text => text.replace(/\n/g, '<br>');
+const formatTextc = text => text.replace(/\n/g, '');
 
 const createTray = () => {
   console.log("[DEBUG_LOG] - Criando ícone da bandeja...");
   tray = new Tray(path.join(__dirname, "./ui/image/749a8e803f7abea1f44bce4832b18d75.png"));
   tray.setToolTip("Discord Rich Presence RedeWorth");
-
   tray.on("click", () => mainWindow.show());
-  console.log("[DEBUG_LOG] - Ícone da bandeja configurado com sucesso.");
-
-  updateTrayMenu("stop")
+  updateTrayMenu("stop");
 };
 
-const updateTrayMenu = (state) => {
+const updateTrayMenu = state => {
   const trayMenu = Menu.buildFromTemplate([
     { label: "Mostrar Painel", click: () => mainWindow.show() },
-    {
-      label: "Iniciar Rich Presence", click: () => {
-        startRPCProcess(nickname);
-        updateTrayMenu("run");
-      }, enabled: state !== "run"
-    },
-    {
-      label: "Reiniciar Rich Presence", click: () => {
-        startRPCProcess(nickname);
-        updateTrayMenu("restart");
-        setTimeout(() => updateTrayMenu("run"), 5000);
-      }
-    },
-    {
-      label: "Parar Rich Presence", click: () => {
-        stopRPCProcess();
-        updateTrayMenu("stop");
-      }, enabled: state !== "stop"
-    },
-    {
-      label: "Fechar Rich Presence", click: () => {
-        tryAgain = true;
-        app.quit();
-      }
-    }
+    { label: "Iniciar Rich Presence", click: () => startRPCProcess(nickname), enabled: state !== "run" },
+    { label: "Reiniciar Rich Presence", click: () => restartRPCProcess() },
+    { label: "Parar Rich Presence", click: stopRPCProcess, enabled: state !== "stop" },
+    { label: "Fechar Rich Presence", click: () => { tryAgain = true; app.quit(); } }
   ]);
-
   tray.setContextMenu(trayMenu);
 };
 
@@ -77,30 +47,21 @@ const createMainWindow = () => {
   });
 
   if (config.environment === "Production") Menu.setApplicationMenu(Menu.buildFromTemplate([]));
-  console.log("[DEBUG_LOG] - Aplicação iniciada em modo de " + config.environment);
-
   mainWindow.loadFile('ui/index.html');
   mainWindow.setTitle("Discord Rich Presence RedeWorth");
-  mainWindow.setIcon(path.join(__dirname, "./ui/image/749a8e803f7abea1f44bce4832b18d75.png"))
-  console.log('[DEBUG_LOG] - Janela principal inicializada.');
-
-  const interval = setInterval(() => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
+  
+  setInterval(() => {
+    if (!mainWindow.isDestroyed()) {
       mainWindow.webContents.send('versionAPP', `v${peq.version}`);
       mainWindow.webContents.send('MemoryUsed', process.memoryUsage());
       mainWindow.webContents.send('config', db.rich.get("configRichPresence"));
       mainWindow.webContents.send('configApp', db.get("config"));
-    } else {
-      clearInterval(interval);
-
-      console.log(`[DEBUG_LOG] - Sistema inteiro desativado por completo.`)
     }
   }, 1000);
 
-  mainWindow.on('close', (event) => {
-    if(noAgain === true) return app.quit();
-    
-    if (tryAgain === false) {
+  mainWindow.on('close', event => {
+    if (noAgain) return app.quit();
+    if (!tryAgain) {
       event.preventDefault();
       mainWindow.hide();
       console.log("[DEBUG_LOG] - Janela minimizada para a bandeja.");
@@ -111,71 +72,53 @@ const createMainWindow = () => {
 };
 
 const createSplashWindow = () => {
-  console.log('[DEBUG_LOG] - Inicializando janela de carregamento.');
-  splashWindow = new BrowserWindow({
-    width: 950, height: 600, frame: false, alwaysOnTop: true,
-    resizable: false, transparent: false,
-    webPreferences: { nodeIntegration: false }
-  });
+  splashWindow = new BrowserWindow({ width: 950, height: 600, frame: false, alwaysOnTop: true, resizable: false });
   splashWindow.loadFile('ui/splash.html');
-  console.log('[DEBUG_LOG] - Janela de carregamento inicializada.');
   splashWindow.setTitle("Discord Rich Presence RedeWorth");
-  splashWindow.setIcon(path.join(__dirname, "./ui/image/749a8e803f7abea1f44bce4832b18d75.png"))
-
 };
 
-const startRPCProcess = (nick) => {
-
-  console.log(nickname, db.get("configRichPresence/nickname") ?? "nada")
-
-
-  updateTrayMenu("run")
+const startRPCProcess = nick => {
+  updateTrayMenu("run");
   console.clear();
   mainWindow.webContents.send('startRPC', "ok");
   console.log('[DEBUG_LOG] - Iniciando RPC...');
-  if (rpcProcess) rpcProcess.kill();
 
   if (rpcProcess) console.log('[DEBUG_LOG] - Status do RPC Morto pelo sistema para evitar duplicação.')
-
+    
+  rpcProcess?.kill();
+  
+  
   rpcProcess = spawn('node', ['src/RichPresence.js'], {
     env: { ...process.env, NICKNAME: nick },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
 
-  rpcProcess.stdout.on('data', (data) => handleRPCProcessOutput(data));
-  rpcProcess.stderr.on('data', (data) => console.error(formatTextc(`Erro: ${data}`)));
+  rpcProcess.stdout.on('data', handleRPCProcessOutput);
+  rpcProcess.stderr.on('data', data => console.error(formatTextc(`Erro: ${data}`)));
   rpcProcess.on('close', () => console.log('[DEBUG] - RPC encerrado.'));
 };
 
+const restartRPCProcess = () => {
+  stopRPCProcess();
+  setTimeout(() => startRPCProcess(nickname), 5000);
+};
+
 const stopRPCProcess = () => {
-  updateTrayMenu("stop")
+  updateTrayMenu("stop");
   if (rpcProcess) {
     rpcProcess.kill();
     rpcProcess = null;
     mainWindow.webContents.send('terminal-output', formatText('[DEBUG] - Atividade desativada com sucesso.'));
-    console.log('[DEBUG_LOG] - Status do RPC parado.')
   }
 };
 
-const handleRPCProcessOutput = (data) => {
+const handleRPCProcessOutput = data => {
   const output = data.toString();
-  if (output.includes("[DEBUG] - Minecraft foi aberto!")) {
-    mainWindow.webContents.send('activities-minecraft', Date.now());
-  } else if (output.includes("[DEBUG] - Minecraft foi fechado!")) {
-    mainWindow.webContents.send('activities-minecraft', 0);
-  }
-
+  if (output.includes("[DEBUG] - Minecraft foi aberto!")) mainWindow.webContents.send('activities-minecraft', Date.now());
+  if (output.includes("[DEBUG] - Minecraft foi fechado!")) mainWindow.webContents.send('activities-minecraft', 0);
+  if (output.includes("[DEBUG] - Discord desconectado")) setTimeout(() => restartRPCProcess(), 5000);
   if (output.includes("[DEBUG] - Atividade personalizada ativada (atualização a cada 15s)")) {
     mainWindow.webContents.send('activities-reload-time-active', 15);
-  }
-
-  if (output.includes("[DEBUG] - Discord desconectado, tentando reconectar...")) {
-    var intervalV = setInterval(() => {
-      stopRPCProcess()
-      startRPCProcess(nickname)
-      // if (rpcProcess) rpcProcess.stdin.write(backupConfig);
-      clearInterval(intervalV);
-    }, 5000)
   }
 
   if (output.includes("[DEBUG_LOG] - ")) {
@@ -183,7 +126,6 @@ const handleRPCProcessOutput = (data) => {
   }
 
   mainWindow.webContents.send('terminal-output', formatText(output));
-
   console.log(formatTextc(output));
 };
 
@@ -193,36 +135,26 @@ const initializeApp = () => {
   setTimeout(() => {
     createMainWindow();
     createTray();
-    setTimeout(() => {
-      splashWindow.close();
-    }, 800);
+    splashWindow.close();
   }, 3000);
-  autoUpdater.checkForUpdatesAndNotify();
 };
 
 app.whenReady().then(initializeApp);
 
-ipcMain.on('startRPC', (event, nick) => { startRPCProcess(nick); nickname === nick });
+ipcMain.on('startRPC', (event, nick) => startRPCProcess(nick));
 ipcMain.on('stopRPC', stopRPCProcess);
 ipcMain.on('config', (event, data) => {
-  if (data.nickname) nickname = data.nickname;
-  if (rpcProcess) rpcProcess.stdin.write(JSON.stringify(data) + '\n');
-  backupConfig = JSON.stringify(JSON.stringify(data) + '\n');
-
-  console.log('[DEBUG_LOG] - Configurações salvas com sucesso.')
-  console.log('[DEBUG_LOG] - Nome do jogador: ', nickname);
-  console.log('[DEBUG_LOG] - Configurações: ', JSON.stringify(data));
-
-  db.rich.set("configRichPresence", data)
+  nickname = data.nickname ?? nickname;
+  rpcProcess?.stdin.write(JSON.stringify(data) + '\n');
+  db.rich.set("configRichPresence", data);
 });
 
 ipcMain.on('configApp', (event, data) => {
-  db.set("config", data)
-  if (data.minimizeToTray === true) noAgain = false;
-  if (data.minimizeToTray === false) noAgain = true;
+  db.set("config", data);
+  noAgain = data.minimizeToTray === false;
 });
 
-app.on('window-all-closed', (event) => {
+app.on('window-all-closed', event => {
   event.preventDefault();
   console.log('[DEBUG_LOG] - Tentativa de fechar todas as janelas bloqueada.');
 });
