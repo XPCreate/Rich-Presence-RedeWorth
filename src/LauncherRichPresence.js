@@ -9,7 +9,7 @@ require("./plugins/terminalLogInfo");
 console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', path.dirname(process.cwd()));
 console.log("[DEBUG_LOG] - Iniciando sistemas...");
 
-let mainWindow, rpcProcess, splashWindow, tray;
+let mainWindow, rpcProcess, splashWindow, tray, timeStart;
 let nickname = db.rich.get("configRichPresence/nickname") ?? "";
 let tryAgain = false;
 let noAgain = db.get("config/minimizeToTray") === false;
@@ -78,9 +78,13 @@ const createSplashWindow = () => {
 };
 
 const startRPCProcess = nick => {
+  timeStart = Date.now();
+
   updateTrayMenu("run");
   console.clear();
-  mainWindow.webContents.send('startRPC', "ok");
+  mainWindow.webContents.send('startRPC', {
+    timeStart
+  });
   console.log('[DEBUG_LOG] - Iniciando RPC...');
 
   if (rpcProcess) console.log('[DEBUG_LOG] - Status do RPC Morto pelo sistema para evitar duplicação.')

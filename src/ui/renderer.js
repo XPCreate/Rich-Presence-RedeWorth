@@ -8,6 +8,9 @@ let dateOnActivities = 0;
 let dateReloadStatus = 0;
 let dateOnActivitieMinecraft = 0;
 let nickname = "";
+let startRPC;
+let jqwerftj = document.getElementById("showActivitiesReal").checked;
+let dsaf34r = document.getElementById("editTimeActivitiesProfile").value;
 
 const formatTimeDifference = (timestamp) => {
     let diff = Date.now() - timestamp;
@@ -87,10 +90,12 @@ const handleRPCAction = (action) => {
     var showClient = document.getElementById('showClient').checked;
     var showPlayers = document.getElementById('showPlayers').checked;
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
+    var showActivitiesReal = document.getElementById("showActivitiesReal").checked;
 
     ipcRenderer.send(`${action}RPC`, nickname);
 
     ipcRenderer.send(`config`, {
+        showActivitiesReal,
         editTimeActivitiesProfile,
         showClient,
         showPlayers,
@@ -172,6 +177,7 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     var showPlayers = document.getElementById('showPlayers').checked;
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
     var nickInput = document.getElementById("editNick").value;
+    var showActivitiesReal = document.getElementById("showActivitiesReal").checked;
 
     if (nickInput.length < 3) {
         showError("Coloque um nickname maior que 3 letras.");
@@ -182,6 +188,7 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     nickname = nickInput;
 
     ipcRenderer.send(`config`, {
+        showActivitiesReal,
         editTimeActivitiesProfile,
         showClient,
         showPlayers,
@@ -190,7 +197,7 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     });
 
     toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "none");
-    csfg=false
+    csfg = false
     showError("Configurações salvas.");
 });
 document.getElementById('configButton').addEventListener('click', () => {
@@ -215,6 +222,41 @@ document.getElementById("minimizeToTray").addEventListener("click", function () 
         minimizeToTray
     });
 });
+
+document.getElementById("editTimeActivitiesProfile").addEventListener("change", function () {
+    if(dsaf34r !== document.getElementById("editTimeActivitiesProfile").value) {
+        document.getElementById("showActivitiesReal").checked = false
+        ipcRenderer.send(`config`, {
+            showActivitiesReal: false,
+            editTimeActivitiesProfile,
+            showClient,
+            showPlayers,
+            showTimeActivities,
+            nickname
+        });
+    }
+})
+
+document.getElementById("showActivitiesReal").addEventListener("click", function () {
+    ipcRenderer.send(`config`, {
+        showActivitiesReal: document.getElementById("showActivitiesReal").checked,
+        editTimeActivitiesProfile,
+        showClient,
+        showPlayers,
+        showTimeActivities,
+        nickname
+    });
+
+    document.getElementById('editTimeActivitiesProfile').value = new Date(startRPC).toLocaleString("en-CA", {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }).replace(',', '');
+})
 
 function showClientConfig() {
     csfg = true;
@@ -242,11 +284,24 @@ ipcRenderer.on('versionAPP', (event, data) => {
     document.getElementById('versionAPP').textContent = data;
 });
 
-ipcRenderer.on('startRPC', () => {
+ipcRenderer.on('startRPC', (event, data) => {
+    if (jqwerftj === true) {
+        document.getElementById("editTimeActivitiesProfile").value = new Date(startRPC).toLocaleString("en-CA", {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        }).replace(',', '');
+    }
+
+    startRPC = data.timeStart;
+    console.log(data, startRPC);
     document.getElementById('reloadRPC').disabled = false;
     document.getElementById('stopRPC').disabled = false;
     dateOnActivities = Date.now() - 1000;
-    // dateReloadStatus = 16;
 
     let currentDate = new Date();
     let formattedDate = currentDate.toLocaleString("en-CA", {
@@ -265,8 +320,10 @@ ipcRenderer.on('startRPC', () => {
     var showClient = document.getElementById('showClient').checked;
     var showPlayers = document.getElementById('showPlayers').checked;
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
+    var showActivitiesReal = document.getElementById("showActivitiesReal").checked;
 
     ipcRenderer.send(`config`, {
+        showActivitiesReal,
         editTimeActivitiesProfile,
         showClient,
         showPlayers,
@@ -288,24 +345,29 @@ ipcRenderer.on('activities-reload-time-active', (event, data) => {
 })
 
 ipcRenderer.on('config', (event, data) => {
-    if(csfg === true) return;
+    if (csfg === true) return;
 
     var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;
     var showClient = document.getElementById('showClient').checked;
     var showPlayers = document.getElementById('showPlayers').checked;
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
+    var showActivitiesReal = document.getElementById("showActivitiesReal").checked;
+
+    jqwerftj = data.showActivitiesReal;
+    dsaf34r = data.editTimeActivitiesProfile;
 
     if (nickname !== data.nickname) nickname = data.nickname;
     if (nickname !== data.nickname) document.getElementById('editNick').value = nickname;
     if (showClient !== data.showClient) document.getElementById('showClient').checked = data.showClient;
     if (showPlayers !== data.showPlayers) document.getElementById('showPlayers').checked = data.showPlayers;
     if (showTimeActivities !== data.showTimeActivities) document.getElementById('showTimeActivities').checked = data.showTimeActivities;
+    if (showActivitiesReal !== data.showActivitiesReal) document.getElementById('showActivitiesReal').checked = data.showActivitiesReal;
     if (editTimeActivitiesProfile !== data.editTimeActivitiesProfile) document.getElementById("editTimeActivitiesProfile").value = data.editTimeActivitiesProfile
     document.getElementById('headNickname').src = `https://mc-heads.net/avatar/${data.nickname}/16x16`;
 })
 
 ipcRenderer.on('configApp', (event, data) => {
-    if(csfg === true) return;
+    if (csfg === true) return;
 
     var minimizeToTray = document.getElementById('minimizeToTray').checked;
 
@@ -335,6 +397,11 @@ setInterval(() => {
 }, 1000);
 
 setTimeout(updateServerInfo, 1000);
+setInterval(() => {
+    const documentShowActiveae = new Date(document.getElementById("editTimeActivitiesProfile").value).getTime();
+    if (documentShowActiveae === startRPC) { console.log("certo") } else { console.log("errado", documentShowActiveae, startRPC) }
+
+}, 100);
 setInterval(updateServerInfo, 10000);
 
 setTimeout(checkForUpdates, 1900);
@@ -344,7 +411,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === "Escape") {
         toggleElementsDisplay(document.getElementsByClassName("wedfr-d3"), "none");
         toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "none");
-        csfg=false
+        csfg = false
         toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "none");
     }
 });

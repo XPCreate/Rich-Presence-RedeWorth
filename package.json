@@ -1,7 +1,7 @@
 {
   "name": "rich-presence-redeworth",
   "productName": "Discord Rich Presence Rede Worth",
-  "version": "1.9.7",
+  "version": "1.9.8",
   "description": "Status personalizado do Discord, para fins de divulgação do servidor Rede Worth.",
   "main": "src/LauncherRichPresence.js",
   "bin": "src/LauncherRichPresence.js",
@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@types/discord-rpc": "^4.0.8",
-    "electron": "^34.3.3"
+    "electron": "^34.3.4"
   },
   "homepage": "https://github.com/XPCreate/Rich-Presence-RedeWorth#readme",
   "repository": {
