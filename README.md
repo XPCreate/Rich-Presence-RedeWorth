@@ -1,15 +1,19 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# 🎮 Atividade RedeWorth `v1.9.8`  
+# 🎮 Atividade RedeWorth `v1.9.9`  
 ### 🚀 Exclusivo para divulgação da RedeWorth  
 
 ## 📌 Novidades e Melhorias  
 
-🔹 **Sistema**  
- - Adicionamos uma nova função para você escolher quando usar o tempo da atividade iniciada e não a personalizada.
+🔹 **Aplicativo**
+- Corrigidos erros de caligrafia.
+- Visualizações das mensagens de logs foram arrumadas.
+
+🔹 **Designer**
+- Mudamos a interface dos botões padrão do Windows (minimizar, maximizar e fechar).
 
  🔹 **Código**  
-- Otimizamos grande parte do código para um desempenho mais eficiente.  
+- Otimizamos parte do código.
 
 ---
 

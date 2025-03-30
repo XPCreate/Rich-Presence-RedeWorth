@@ -43,13 +43,17 @@ const createMainWindow = () => {
     height: 600,
     title: 'Discord Rich Presence RedeWorth',
     icon: path.join(__dirname, "./ui/image/749a8e803f7abea1f44bce4832b18d75.png"),
-    webPreferences: { nodeIntegration: true, contextIsolation: false }
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    frame: false,
   });
 
   if (config.environment === "Production") Menu.setApplicationMenu(Menu.buildFromTemplate([]));
   mainWindow.loadFile('ui/index.html');
   mainWindow.setTitle("Discord Rich Presence RedeWorth");
-  
+
   setInterval(() => {
     if (!mainWindow.isDestroyed()) {
       mainWindow.webContents.send('versionAPP', `v${peq.version}`);
@@ -58,6 +62,22 @@ const createMainWindow = () => {
       mainWindow.webContents.send('configApp', db.get("config"));
     }
   }, 1000);
+
+  ipcMain.on("minimize-window", () => {
+    mainWindow.minimize();
+  });
+
+  ipcMain.on("maximize-window", () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  });
+
+  ipcMain.on("close-window", () => {
+    app.quit();
+  });
 
   mainWindow.on('close', event => {
     if (noAgain) return app.quit();
@@ -88,10 +108,10 @@ const startRPCProcess = nick => {
   console.log('[DEBUG_LOG] - Iniciando RPC...');
 
   if (rpcProcess) console.log('[DEBUG_LOG] - Status do RPC Morto pelo sistema para evitar duplicação.')
-    
+
   rpcProcess?.kill();
-  
-  
+
+
   rpcProcess = spawn('node', ['src/RichPresence.js'], {
     env: { ...process.env, NICKNAME: nick },
     stdio: ['pipe', 'pipe', 'pipe'],

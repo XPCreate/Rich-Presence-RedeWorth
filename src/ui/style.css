@@ -1298,15 +1298,6 @@
     font-family: 'League Spartan';
 }
 
-nav.navbar {
-    background-color: #0B121F;
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
 nav.navbar h1.title {
     pointer-events: none;
     font-family: 'Pacifico', cursive;
@@ -1418,7 +1409,7 @@ div.wedfr-d32 .adsf {
     animation: 300ms;
     width: 320px;
     border-radius: 8px;
-    margin: 236px 10px;
+    margin: 310px 10px;
 }
 
 div.wedfr-d32 .adsf .cer4 {
@@ -1444,6 +1435,58 @@ div.sf34 .sr43 .erf button[disabled] {
     cursor: no-drop;
 }
 
+.v4tc {
+    display: flex;
+    align-items: center;
+    -webkit-app-region: no-drag;
+}
+
+nav.navbar {
+    z-index: 100;
+    position: fixed;
+    background-color: #0B121F;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    -webkit-app-region: drag; /* Permite arrastar a janela */
+    user-select: none; /* Evita seleção de texto acidental */
+}
+
+.custom-title-bar {
+     /* width: 100%; */
+  height: 30px;
+  background: #0b121f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  -webkit-app-region: drag; /* Permite arrastar a janela */
+  user-select: none; /* Evita seleção de texto acidental */
+  }
+  
+  .window-controls {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .window-controls button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+    height: 50px;
+    width: 40px;
+    -webkit-app-region: no-drag; /* Permite clique nos botões */
+  }
+  
+  .window-controls button:hover {
+    background: #444;
+  }
 
 div.wedfr {
     width: 100%;

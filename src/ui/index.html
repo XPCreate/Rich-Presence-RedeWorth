@@ -10,6 +10,7 @@
     <meta name="description" content="Configurações do Rich Presence para Discord">
     <meta name="og:title" content="Discord Rich Presence RedeWorth">
     <meta name="og:description" content="Configure sua Rich Presence para Discord">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
     <link rel="icon" href="./image/749a8e803f7abea1f44bce4832b18d75.png" sizes="32x32">
     <link rel="icon" href="./image/749a8e803f7abea1f44bce4832b18d75.png" type="image/svg+xml">
     <link rel="apple-touch-icon" sizes="180x180" href="./image/749a8e803f7abea1f44bce4832b18d75.png">
@@ -28,7 +29,6 @@
 </head>
 
 <body style="background-color: #040A15;">
-
     <div>
         <div class="wedfr">
             <span class="loader"></span>
@@ -125,7 +125,7 @@
                         <div class="werf4">
                             <div class="cer4">
                                 <h1 style="font-weight: 700;">Minimizar para a bandeija</h1>
-                                <span>Clicar no X fará o Aplicativo ficar escondidinho e confortável na sua barra de tarefs quando você fechar o app.</span>
+                                <span>Clicar no X fará o Aplicativo ficar escondidinho e confortável na sua barra de tarefas quando você fechar o app.</span>
                             </div>
                             <div>
                                 <label class="switch mt-[8px]">
@@ -134,7 +134,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="werf4" style="pointer-events: none; opacity: 0.5;">
+                        <!-- <div class="werf4" style="pointer-events: none; opacity: 0.5;">
                             <div class="cer4">
                                 <h1 style="font-weight: 700;">Abrir o Aplicativo</h1>
                                 <span>Economize alguns cliques e deixe que nós abrimos o Aplicativo assim que o sistema for iniciado.</span>
@@ -145,7 +145,7 @@
                                     <div class="slider round"></div>
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </form>
 
@@ -163,12 +163,18 @@
             <div>
                 <h1 class="title">Discord Rich Presence RedeWorth</h1>
             </div>
-            <div>
-                <span title="Baixar nova versão." class="f43fd" id="f43fd" style="display: none;"><i
+            <div class="v4tc">
+                <span title="Baixar nova versão." class="f43fd" id="f43fd" style="display: none;margin-top: 6px;"><i
                         class="fa-solid fa-arrow-down-to-line" style="color: #49bb52"></i></span>
+                        <div class="window-controls">
+                            <button id="minimize-btn" title="Minimizar Janela">🗕</button>
+                            <!-- <button id="maximize-btn" title="Maximizar Janela">🗖</button> -->
+                            <button id="close-btn" title="Fechar Janela">🗙</button>
+                          </div>
             </div>
         </nav>
         <div class="container">
+            <div style="margin-top: 100px;"></div>
             <div class="a34rewfd">
                 <div class="de4-f5g3">
                     <div class="ds23">

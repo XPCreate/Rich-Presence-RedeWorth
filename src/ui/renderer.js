@@ -397,13 +397,7 @@ setInterval(() => {
 }, 1000);
 
 setTimeout(updateServerInfo, 1000);
-setInterval(() => {
-    const documentShowActiveae = new Date(document.getElementById("editTimeActivitiesProfile").value).getTime();
-    if (documentShowActiveae === startRPC) { console.log("certo") } else { console.log("errado", documentShowActiveae, startRPC) }
-
-}, 100);
 setInterval(updateServerInfo, 10000);
-
 setTimeout(checkForUpdates, 1900);
 setInterval(checkForUpdates, 30000);
 
@@ -414,4 +408,16 @@ document.addEventListener('keydown', (event) => {
         csfg = false
         toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "none");
     }
+});
+
+document.getElementById("minimize-btn").addEventListener("click", () => {
+  ipcRenderer.send("minimize-window");
+});
+
+// document.getElementById("maximize-btn").addEventListener("click", () => {
+//   ipcRenderer.send("maximize-window");
+// });
+
+document.getElementById("close-btn").addEventListener("click", () => {
+  ipcRenderer.send("close-window");
 });

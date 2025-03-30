@@ -27,35 +27,30 @@ console.log = function (...args) {
     const message = `[${new Date().toISOString()}] [LOG] ${removeColorCodes(args.join(' '))}\n`;
     writeLog(logFilePath, message);
     writeLog(uniqueLogFilePath, message);
-    // originalConsoleLog.apply(console, args);
 };
 
 console.warn = function (...args) {
     const message = `[${new Date().toISOString()}] [WARN] ${removeColorCodes(args.join(' '))}\n`;
     writeLog(logFilePath, message);
     writeLog(uniqueLogFilePath, message);
-    // originalConsoleLog.apply(console, args);
 };
 
 console.error = function (...args) {
     const message = `[${new Date().toISOString()}] [ERROR] ${removeColorCodes(args.join(' '))}\n`;
     writeLog(logFilePath, message);
     writeLog(uniqueLogFilePath, message);
-    // originalConsoleLog.apply(console, args);
 };
 
 console.debug = function (...args) {
     const message = `[${new Date().toISOString()}] [DEBUG] ${removeColorCodes(args.join(' '))}\n`;
     writeLog(logFilePath, message);
     writeLog(uniqueLogFilePath, message);
-    // originalConsoleLog.apply(console, args);
 };
 
 console.info = function (...args) {
     const message = `[${new Date().toISOString()}] [INFO] ${removeColorCodes(args.join(' '))}\n`;
     writeLog(logFilePath, message);
     writeLog(uniqueLogFilePath, message);
-    // originalConsoleLog.apply(console, args);
 };
 
 module.exports = console.log;
