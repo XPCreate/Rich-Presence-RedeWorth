@@ -211,7 +211,9 @@ ipcMain.on("updateVerify", async (event, data2) => {
   const versaoMaisRecente = data.tag_name;
   const versaoLocal = `v${peq.version}`;
 
-  let zipUrl = "";
+  console.log(versaoMaisRecente, versaoLocal, Number(versaoMaisRecente.replace(/[^\d]/g, "")), Number(versaoLocal.replace(/[^\d]/g, "")), versaoLocal !== versaoMaisRecente)
+
+  let zipUrl = null;
   if (versaoLocal !== versaoMaisRecente) {
     if (
       Number(versaoMaisRecente.replace(/[^\d]/g, "")) <=
@@ -221,10 +223,12 @@ ipcMain.on("updateVerify", async (event, data2) => {
     zipUrl = data.assets[0]?.browser_download_url;
   }
 
+  if(!zipUrl) return splashWindow.webContents.send("firstUpdate", false);
+
   splashWindow.webContents.send("yepUpdate", true);
 
   const outputPath = path.join(__dirname, "test.zip");
-  const extractPath = path.join(__dirname, "nova_pasta");
+  const extractPath = path.join(__dirname, "..");
 
   const writer = fs.createWriteStream(outputPath);
 
