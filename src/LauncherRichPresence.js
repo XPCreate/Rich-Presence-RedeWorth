@@ -1,9 +1,15 @@
 const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 const peq = require('../package.json');
 const config = require('./configFile');
 const { db } = require('./plugins/dataDB');
+const { pipeline } = require('stream');
+const { promisify } = require('util');
+
+const streamPipeline = promisify(pipeline);
+
 require("./plugins/terminalLogInfo");
 
 console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', path.dirname(process.cwd()));
@@ -92,10 +98,27 @@ const createMainWindow = () => {
 };
 
 const createSplashWindow = () => {
-  splashWindow = new BrowserWindow({ width: 950, height: 600, frame: false, alwaysOnTop: true, resizable: false });
+  splashWindow = new BrowserWindow({
+    width: 950,
+    height: 600,
+    frame: false,
+    alwaysOnTop: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
   splashWindow.loadFile('ui/splash.html');
   splashWindow.setTitle("Discord Rich Presence RedeWorth");
 };
+
+function restartApp() {
+  console.log("[LOG] Reiniciando a aplicação...");
+
+  app.relaunch();
+  app.exit(0);
+}
 
 const startRPCProcess = nick => {
   timeStart = Date.now();
@@ -156,11 +179,6 @@ const handleRPCProcessOutput = data => {
 const initializeApp = () => {
   console.log("[DEBUG_LOG] - Inicializando aplicação...");
   createSplashWindow();
-  setTimeout(() => {
-    createMainWindow();
-    createTray();
-    splashWindow.close();
-  }, 3000);
 };
 
 app.whenReady().then(initializeApp);
@@ -171,6 +189,113 @@ ipcMain.on('config', (event, data) => {
   nickname = data.nickname ?? nickname;
   rpcProcess?.stdin.write(JSON.stringify(data) + '\n');
   db.rich.set("configRichPresence", data);
+});
+
+ipcMain.on("firstUpdate", (event, data) => {
+  createMainWindow();
+  createTray();
+  splashWindow.close();
+})
+
+ipcMain.on("updateVerify", async (event, data2) => {
+  const AdmZip = require("adm-zip");
+
+  const response = await fetch(
+    "https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest"
+  );
+  if (!response.ok) return;
+
+  const data = await response.json();
+  if (!data.tag_name) return;
+
+  const versaoMaisRecente = data.tag_name;
+  const versaoLocal = `v${peq.version}`;
+
+  let zipUrl = "";
+  if (versaoLocal !== versaoMaisRecente) {
+    if (
+      Number(versaoMaisRecente.replace(/[^\d]/g, "")) <=
+      Number(versaoLocal.replace(/[^\d]/g, ""))
+    )
+      return splashWindow.webContents.send("firstUpdate", false);
+    zipUrl = data.assets[0]?.browser_download_url;
+  }
+
+  splashWindow.webContents.send("yepUpdate", true);
+
+  const outputPath = path.join(__dirname, "test.zip");
+  const extractPath = path.join(__dirname, "nova_pasta");
+
+  const writer = fs.createWriteStream(outputPath);
+
+  async function downloadAndExtract() {
+    try {
+      console.log("[LOG] Baixando arquivo ZIP...");
+      const response = await fetch(zipUrl);
+      if (!response.ok) {
+        throw new Error(
+          `[ERROR] Erro ao baixar o arquivo: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const totalSize = response.headers.get('content-length');
+      if (!totalSize) {
+        console.warn("[WARN] Não foi possível obter o tamanho do arquivo.");
+      }
+      const totalBytes = totalSize ? parseInt(totalSize, 10) : null;
+      let downloadedSize = 0;
+
+      const { Transform } = require('stream');
+
+      const progressStream = new Transform({
+        transform(chunk, encoding, callback) {
+          downloadedSize += chunk.length;
+          if (totalBytes) {
+            const percent = Math.round((downloadedSize / totalBytes) * 100);
+            splashWindow.webContents.send('outputPercentUpdate', percent);
+          }
+          this.push(chunk);
+          callback();
+        }
+      });
+
+      await streamPipeline(response.body, progressStream, writer);
+
+      console.log("[LOG] Download finalizado corretamente.");
+
+      splashWindow.webContents.send('updateDonwloadFirst', true);
+
+      console.log("[LOG] Extraindo arquivos...");
+
+      const zip = new AdmZip(outputPath);
+      const zipEntries = zip.getEntries();
+      const totalFiles = zipEntries.length;
+      let extractedFiles = 0;
+
+      zipEntries.forEach((entry) => {
+        zip.extractEntryTo(entry, extractPath, true, true);
+        extractedFiles++;
+
+        const percent = Math.round((extractedFiles / totalFiles) * 100);
+        splashWindow.webContents.send('outputPercentExtractedFiles', percent);
+      });
+
+      console.log("[LOG] Extração concluída.");
+      splashWindow.webContents.send('outputExtractedFiles', true);
+      console.log("Arquivos extraídos para:", extractPath);
+
+      fs.unlinkSync(outputPath);
+      console.log("Arquivo ZIP removido.");
+
+      setTimeout(restartApp, 100);
+
+      return splashWindow.webContents.send("firstUpdate", true);
+    } catch (error) {
+      console.error("Erro:", error);
+    }
+  }
+
+  setTimeout(async () => {await downloadAndExtract()}, 500)
 });
 
 ipcMain.on('configApp', (event, data) => {
