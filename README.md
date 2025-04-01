@@ -5,11 +5,11 @@
 
 ## 📌 Novidades e Melhorias  
 
-###🔹 **Designer**
+### 🔹 **Designer**
 - Adicionamos o botão de maximizar a janela.
 - Deixamos o aplicativo mais flexivel, agora ele fica bonito de qualquer tamanho!
 
-###🔹 **Aplicativo**
+### 🔹 **Aplicativo**
 - Melhoramos boa parte do codigo.
 - Melhoramos o sistema de atualização automatica.
 
