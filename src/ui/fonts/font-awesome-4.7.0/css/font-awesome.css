@@ -49,6 +49,14 @@
 .fa-ul > li {
   position: relative;
 }
+
+.fa-address-book-o:before {
+  content: "\f2b9";
+  font-size: 1.5em;
+  color: #555555;
+  line-height: 1;
+}
+
 .fa-li {
   position: absolute;
   left: -2.14285714em;

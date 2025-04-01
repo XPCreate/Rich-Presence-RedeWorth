@@ -169,7 +169,7 @@ document.getElementById('startRPC2').addEventListener('click', () => handleRPCAc
 document.getElementById('reloadRPC').addEventListener('click', () => handleRPCAction('reload'));
 document.getElementById('stopRPC').addEventListener('click', () => handleRPCAction('stop'));
 document.getElementById('f43fd').addEventListener('click', () => {
-    if (downloadNewVersion) window.open(downloadNewVersion, "_blank");
+    ipcRenderer.send("updateVersionApp", {})
 });
 document.getElementById('saveConfig').addEventListener('click', () => {
     var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;

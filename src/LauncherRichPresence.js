@@ -197,16 +197,22 @@ ipcMain.on("firstUpdate", (event, data) => {
   splashWindow.close();
 })
 
+ipcMain.on("updateVersionApp", async(event, data) => {
+  restartApp();
+})
+
 ipcMain.on("updateVerify", async (event, data2) => {
+
+  console.log("a");
   const AdmZip = require("adm-zip");
 
   const response = await fetch(
     "https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest"
   );
-  if (!response.ok) return;
+  if (!response.ok) return splashWindow.webContents.send("firstUpdate", false);;
 
   const data = await response.json();
-  if (!data.tag_name) return;
+  if (!data.tag_name) return splashWindow.webContents.send("firstUpdate", false);;
 
   const versaoMaisRecente = data.tag_name;
   const versaoLocal = `v${peq.version}`;

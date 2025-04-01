@@ -47,12 +47,12 @@ const detectMinecraftClients = () => {
                 if (stdout.includes(client.process)) {
                     if (!currentClients[client.name]) {
                         currentClients[client.name] = true;
-                        console.log(`[DEBUG] - Cliente ${client.name} foi aberto!`);
+                        console.log(`[DEBUG] - Client ${client.name} foi aberto!`);
                     }
                     detectedClients.push(client.name);
                 } else if (currentClients[client.name]) {
                     currentClients[client.name] = false;
-                    console.log(`[DEBUG] - Cliente ${client.name} foi fechado!`);
+                    console.log(`[DEBUG] - Client ${client.name} foi fechado!`);
                 }
             });
 

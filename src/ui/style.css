@@ -1829,6 +1829,43 @@ div.werf4 {
     justify-content: space-between;
 }
 
+@media (max-width: 840px) {
+    div.a34rewfd {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width:700px) {
+    div.sf34 {
+        flex-direction: column;
+    }
+    div.sf34 .rfdwe {
+        width: 100%;
+    }
+    div.sf34 .rfdwe .ded45t {
+        justify-content: center;
+    }
+}
+
+@media (max-width:530px) {
+    div.sf34 div.t4gre {
+        width: 300px;
+    }
+}
+
+@media (max-width:530px) {
+    div.sf34 div.t4gre {
+        width: 300px;
+    }
+}
+
+@media (max-width: 490px) {
+    nav.navbar h1.title {
+        font-size: 14px;
+    }
+}
+
 ::-webkit-scrollbar {
     height: 15px;
     width: 15px;

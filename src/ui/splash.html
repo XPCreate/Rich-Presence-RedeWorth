@@ -287,33 +287,6 @@
             ipcRenderer.on("outputPercentExtractedFiles", (event, data) => {
                 document.getElementById("title").innerHTML = "Extraindo... <br> " + data + "%";
             })
-
-            // let progress = 0;
-            // const progressBar = document.getElementById("title");
-
-            // function updateProgress() {
-            //     if (progress >= 100) {
-            //         document.getElementById("title").innerHTML = "Iniciando Aplicação..."
-            //         return;
-            //     };
-
-            //     const increment = Math.floor(Math.random() * 5) + 1;
-            //     progress = Math.min(progress + increment, 100);
-
-            //     progressBar.innerHTML = "Pesquisando atualizações... <br> " + progress + "%";
-
-            //     if (progress < 100) {
-            //         setTimeout(updateProgress, Math.floor(Math.random() * 100) + 5);
-            //     } else {
-            //         document.getElementById("title").innerHTML = "Processando informações..."
-
-            //         setTimeout(() => {
-            //             document.getElementById("title").innerHTML = "Iniciando Aplicação..."
-            //         }, 500)
-            //     }
-            // }
-
-            updateProgress();
         }, 500)
     </script>
 </body>
