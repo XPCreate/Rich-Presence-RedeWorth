@@ -1,17 +1,14 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# 🎮 Atividade RedeWorth `v2.0.1`  
+# 🎮 Atividade RedeWorth `v2.0.3`  
 ### 🚀 Exclusivo para divulgação da RedeWorth  
+
+- Uma correção da versão `v2.0.2`!
 
 ## 📌 Novidades e Melhorias  
 
-### 🔹 **Aplicativo**
-- Arrumamos alguns erros para iniciar o aplicativo.
-- Atualizamos algumas dependencias do projeto.
-- Removemos dependencias que não usamos mais.
-- Atualizamos a licença do projeto.
-- Botão de verificar versão na bandeija foi adiciado.
-- Melhoramos algumas partes do codigo antigo.
+- Corrigimos o erro do aplicativo não conseguir abrir caso atualize automaticamente.
+- Corrigimos o erro das dependências.
 
 ---
 

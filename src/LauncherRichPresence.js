@@ -1,13 +1,33 @@
+const fs = require('fs');
+const path = require('path');
+const updateFlagPath = path.join(__dirname, 'update.flag');
+
+if (fs.existsSync(updateFlagPath)) {
+  fs.unlinkSync(updateFlagPath);
+  console.log('[DEBUG_LOG] - Detecção de atualização. Executando script de instalação...');
+
+  const isWindows = process.platform === 'win32';
+  const scriptToRun = isWindows ? 'run.bat' : 'run.sh';
+
+  const scriptPath = path.join(__dirname, '..', scriptToRun);
+
+  spawn(scriptPath, [], {
+    detached: true,
+    stdio: 'ignore',
+    shell: true
+  }).unref();
+
+  app.quit();
+  return;
+}
+
 const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const { spawn } = require('child_process');
-const path = require('path');
-const fs = require('fs');
 const peq = require('../package.json');
 const config = require('./configFile');
 const { db } = require('./plugins/dataDB');
 const { pipeline } = require('stream');
 const { promisify } = require('util');
-
 const streamPipeline = promisify(pipeline);
 
 require("./plugins/terminalLogInfo");
@@ -296,7 +316,7 @@ ipcMain.on("updateVerify", async (event, data2) => {
 
       fs.unlinkSync(outputPath);
       console.log("Arquivo ZIP removido.");
-
+      fs.writeFileSync(path.join(__dirname, 'update.flag'), 'true');
       setTimeout(restartApp, 100);
 
       return splashWindow.webContents.send("firstUpdate", true);
