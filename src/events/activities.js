@@ -11,7 +11,8 @@ const presence = {
         instance: true,
         buttons: [
             { label: '🔴 Conectar', url: 'minecraft://redeworth.com:25565' },
-            { label: 'Discord', url: 'https://discord.gg/ezphhH9BKj' }
+            { label: 'Discord', url: 'https://discord.gg/ezphhH9BKj' },
+            { label: 'Loja', url: 'https://loja.redeworth.com'}
         ],
     },
 };
@@ -101,13 +102,13 @@ module.exports.presence = async (nick, configData) => {
 
         presence.config.smallImageKey = [
             'vitorxp', 'MihawkRevex', 'Draccount', 'MuriloRevex', 'lkttjota',
-            'Menino_Tutuh', 'ShimizuMimi', 'MoonSpy_', 'Neto33rec'
+            'ShimizuMimi', 'MoonSpy_', 'Neto33rec'
         ].includes(nick) ? nick.toLowerCase() : 'usernick';
         presence.config.smallImageText = nick || 'Desconhecido';
 
         return presence.config;
     } catch (err) {
-        console.error(`[ERROR] - ${err.message} (tentando em 15s)`);
+        console.error(`[ERROR] - ${err.message} (tentando novamente em 15s)`);
         return presence.config;
     }
 };

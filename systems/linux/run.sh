@@ -12,7 +12,7 @@ cd "$(dirname "$0")" || exit
 
 npm install
 npm install electron --save-dev
-npm install electron-updater
+npm install adm-zip
 
 nohup npm run start &> /dev/null &
 

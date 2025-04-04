@@ -5,13 +5,13 @@
 
 ## 📌 Novidades e Melhorias  
 
-###🔹 **Designer**
-- Adicionamos o botão de maximizar a janela.
-- Deixamos o aplicativo mais flexivel, agora ele fica bonito de qualquer tamanho!
-
 ###🔹 **Aplicativo**
-- Melhoramos boa parte do codigo.
-- Melhoramos o sistema de atualização automatica.
+- Arrumamos alguns erros para iniciar o aplicativo.
+- Atualizamos algumas dependencias do projeto.
+- Removemos dependencias que não usamos mais.
+- Atualizamos a licença do projeto.
+- Botão de verificar versão na bandeija foi adiciado.
+- Melhoramos algumas partes do codigo antigo.
 
 ---
 

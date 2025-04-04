@@ -21,9 +21,9 @@ async function verificarAtualizarVersao() {
     const versaoLocal = `v${peq.version}`;
 
     if (versaoLocal !== versaoMaisRecente) {
-      if(Number(String(versaoMaisRecente).replaceAll(".", "").replace("v", "")) <= Number(String(versaoLocal).replaceAll(".", "").replace("v", "")))
+      if (Number(String(versaoMaisRecente).replaceAll(".", "").replace("v", "")) <= Number(String(versaoLocal).replaceAll(".", "").replace("v", "")))
         console.log(`\x1b[0;32m[💎] Você já está na versão mais recente, uma que nem existe no meu sistema ainda ;-; (seu abuser)\x1b[0m`);
-      else if((Number(String(versaoLocal).replaceAll(".", "").replace("v", "")) - Number(String(versaoMaisRecente).replaceAll(".", "").replace("v", ""))) <= 3)
+      else if ((Number(String(versaoLocal).replaceAll(".", "").replace("v", "")) - Number(String(versaoMaisRecente).replaceAll(".", "").replace("v", ""))) <= 3)
         console.log(`\x1b[0;31m[⚠️] Você se encontra em uma versão muito antiga, recomendo atualizar urgente.\n➡ Baixe aqui a versão ${versaoMaisRecente}: ${data.assets[0]?.browser_download_url}\x1b[0m`);
       else console.log(`\x1b[0;33m[⚠️] Nova versão disponível: ${versaoMaisRecente}.\n➡ Baixe aqui: ${data.assets[0]?.browser_download_url}\x1b[0m`);
     } else {
@@ -45,12 +45,27 @@ async function exibirBanner() {
   console.clear();
   await verificarAtualizarVersao();
 
-    const largura = 70;
-    setTimeout(() => {console.log(`\n\x1b[0;37m---------------------------------------------------------------\x1b[0m`);}, 100)
-    setTimeout(() => {console.log(`\x1b[0;36m${centralizarTexto('Criado por: vitorxp', largura)}\x1b[0m`);}, 120)
-    setTimeout(() => {console.log(`\x1b[0;33m${centralizarTexto('Para a Rede Worth - Divulgação no Discord.', largura)}\x1b[0m`);}, 140)
-    setTimeout(() => {console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Editado: 30/03/2025`, largura)}\x1b[0m`);}, 160)
-    setTimeout(() => {console.log(`\x1b[0;37m---------------------------------------------------------------\x1b[0m\n`);}, 180)
+  const largura = 70;
+  setTimeout(() => { console.log(`\n\x1b[0;37m---------------------------------------------------------------\x1b[0m`); }, 100)
+  setTimeout(() => { console.log(`\x1b[0;36m${centralizarTexto('Criado por: vitorxp', largura)}\x1b[0m`); }, 120)
+  setTimeout(() => { console.log(`\x1b[0;33m${centralizarTexto('Para a Rede Worth - Divulgação no Discord.', largura)}\x1b[0m`); }, 140)
+  setTimeout(() => {
+    const fs = require('fs');
+    const path = require('path');
+    const projetoPath = path.join(__dirname, '../package.json');
+    const stats = fs.statSync(projetoPath);
+    const dataModificacao = new Date(stats.mtime);
+
+    const formatarData = (data) => {
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    };
+
+    console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Modificado em: ${formatarData(dataModificacao)}`, largura)}\x1b[0m`);
+  }, 160)
+  setTimeout(() => { console.log(`\x1b[0;37m---------------------------------------------------------------\x1b[0m\n`); }, 180)
 }
 
 function customLog(pergunta, callback) {
@@ -73,9 +88,9 @@ async function iniciarRPC() {
     console.log('[DEBUG] - Discord RPC Iniciado.');
 
     RPC.on('ready', async () => {
-    console.log('[DEBUG] - Atividade personalizada ativada (atualização a cada 15s)');
-    await atualizarAtividade();
-    setInterval(atualizarAtividade, 15000);
+      console.log('Atividade personalizada ativada!');
+      await atualizarAtividade();
+      setInterval(atualizarAtividade, 15000);
     });
 
     RPC.on("disconnected", async () => {
@@ -88,20 +103,20 @@ async function iniciarRPC() {
   }
 }
 
-  process.stdin.on('data', (chunk) => {
-    try {
-      const jsonStrings = chunk.toString().trim().split("\n").filter(Boolean);
-      
-      jsonStrings.forEach(jsonStr => {
-        const config = JSON.parse(jsonStr);
-        process.env.CONFIG_DATA = JSON.stringify(config);
-      });
-  
-    } catch (error) {
-      console.error("Erro ao processar JSON:", error.message);
-      console.error(error);
-    }
-  });
+process.stdin.on('data', (chunk) => {
+  try {
+    const jsonStrings = chunk.toString().trim().split("\n").filter(Boolean);
+
+    jsonStrings.forEach(jsonStr => {
+      const config = JSON.parse(jsonStr);
+      process.env.CONFIG_DATA = JSON.stringify(config);
+    });
+
+  } catch (error) {
+    console.error("Erro ao processar JSON:", error.message);
+    console.error(error);
+  }
+});
 
 async function atualizarAtividade() {
   const configData = process.env.CONFIG_DATA ? JSON.parse(process.env.CONFIG_DATA) : {};

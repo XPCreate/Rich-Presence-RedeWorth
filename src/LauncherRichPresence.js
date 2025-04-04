@@ -33,6 +33,7 @@ const createTray = () => {
 
 const updateTrayMenu = state => {
   const trayMenu = Menu.buildFromTemplate([
+    { label: "Verificar Atualização", click: () => restartApp() },
     { label: "Mostrar Painel", click: () => mainWindow.show() },
     { label: "Iniciar Rich Presence", click: () => startRPCProcess(nickname), enabled: state !== "run" },
     { label: "Reiniciar Rich Presence", click: () => restartRPCProcess() },
@@ -57,6 +58,7 @@ const createMainWindow = () => {
   });
 
   if (config.environment === "Production") Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+
   mainWindow.loadFile('ui/index.html');
   mainWindow.setTitle("Discord Rich Presence RedeWorth");
 
@@ -111,11 +113,12 @@ const createSplashWindow = () => {
   });
   splashWindow.loadFile('ui/splash.html');
   splashWindow.setTitle("Discord Rich Presence RedeWorth");
+
+  if (config.environment === "Production") Menu.setApplicationMenu(Menu.buildFromTemplate([]));
 };
 
 function restartApp() {
   console.log("[LOG] Reiniciando a aplicação...");
-
   app.relaunch();
   app.exit(0);
 }
@@ -133,7 +136,6 @@ const startRPCProcess = nick => {
   if (rpcProcess) console.log('[DEBUG_LOG] - Status do RPC Morto pelo sistema para evitar duplicação.')
 
   rpcProcess?.kill();
-
 
   rpcProcess = spawn('node', ['src/RichPresence.js'], {
     env: { ...process.env, NICKNAME: nick },
@@ -164,7 +166,7 @@ const handleRPCProcessOutput = data => {
   if (output.includes("[DEBUG] - Minecraft foi aberto!")) mainWindow.webContents.send('activities-minecraft', Date.now());
   if (output.includes("[DEBUG] - Minecraft foi fechado!")) mainWindow.webContents.send('activities-minecraft', 0);
   if (output.includes("[DEBUG] - Discord desconectado")) setTimeout(() => restartRPCProcess(), 5000);
-  if (output.includes("[DEBUG] - Atividade personalizada ativada (atualização a cada 15s)")) {
+  if (output.includes("[DEBUG] - Atividade personalizada ativada!")) {
     mainWindow.webContents.send('activities-reload-time-active', 15);
   }
 
@@ -202,8 +204,6 @@ ipcMain.on("updateVersionApp", async(event, data) => {
 })
 
 ipcMain.on("updateVerify", async (event, data2) => {
-
-  console.log("a");
   const AdmZip = require("adm-zip");
 
   const response = await fetch(

@@ -1,7 +1,7 @@
 {
   "name": "rich-presence-redeworth",
   "productName": "Discord Rich Presence Rede Worth",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Status personalizado do Discord, para fins de divulgação do servidor Rede Worth.",
   "main": "src/LauncherRichPresence.js",
   "bin": "src/LauncherRichPresence.js",
@@ -12,6 +12,21 @@
     "publish": "electron-builder --publish=always"
   },
   "build": {
+    "files": [
+      "src/**/*",
+      "!dist/**/*",
+      "!node_modules/**/*",
+      "!**/node_modules/*",
+      "!**/dist/*",
+      "!**/*.md",
+      "!**/*.log",
+      "!package-lock.json",
+      "!*.iml",
+      "!test/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
     "appId": "com.vitorxp.rich-presence-redeworth",
     "productName": "Discord Rich Presence Rede Worth",
     "icon": "./src/ui/image/749a8e803f7abea1f44bce4832b18d75.png",
@@ -33,19 +48,26 @@
     }
   },
   "keywords": [
+    "discord",
+    "discord-bot",
     "discord-rich-presence",
     "discord-rpc-bot",
     "discord-bot",
     "discord-bot-rich-presence",
     "discord-bot-rp",
-    "discord-bot-rp-redeworth"
+    "discord-bot-rp-redeworth",
+    "redeworth-rp",
+    "redeworth-rp-bot",
+    "redeworth-rp-bot-discord",
+    "redeworth-rp-bot-discord-rp",
+    "redeworth-rp-bot-discord-rp-vitorxp",
+    "redeworth-rp-bot-discord-rp-vitorxp-rich-presence"
   ],
   "author": "vitorxp",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.5.16",
     "discord-rpc": "^4.0.1",
-    "electron-updater": "^6.6.2",
     "ps-list": "^8.1.1",
     "rich-presence-redeworth": "file:"
   },
@@ -63,7 +85,8 @@
   },
   "devDependencies": {
     "@types/discord-rpc": "^4.0.8",
-    "electron": "^34.4.1"
+    "electron": "^34.5.0",
+    "electron-builder": "^26.0.12"
   },
   "homepage": "https://github.com/XPCreate/Rich-Presence-RedeWorth#readme",
   "repository": {
@@ -72,5 +95,20 @@
   },
   "bugs": {
     "url": "https://github.com/XPCreate/Rich-Presence-RedeWorth/issues"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "husky": {
+      "hooks": {
+        "commit-msg": "commitlint -e $GIT_PARAMS"
+      }
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "commitlint/config-conventional"
+    ]
   }
 }
