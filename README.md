@@ -5,7 +5,7 @@
 
 ## 📌 Novidades e Melhorias  
 
-###🔹 **Aplicativo**
+### 🔹 **Aplicativo**
 - Arrumamos alguns erros para iniciar o aplicativo.
 - Atualizamos algumas dependencias do projeto.
 - Removemos dependencias que não usamos mais.
