@@ -1,3 +1,5 @@
+require("./plugins/terminalLogInfo");
+
 const fs = require('fs');
 const path = require('path');
 const updateFlagPath = path.join(__dirname, 'update.flag');
@@ -9,7 +11,7 @@ if (fs.existsSync(updateFlagPath)) {
   const isWindows = process.platform === 'win32';
   const scriptToRun = isWindows ? 'run.bat' : 'run.sh';
 
-  const scriptPath = path.join(__dirname, '..', scriptToRun);
+  const scriptPath = path.join(__dirname, '../systems', scriptToRun);
 
   spawn(scriptPath, [], {
     detached: true,
@@ -29,8 +31,6 @@ const { db } = require('./plugins/dataDB');
 const { pipeline } = require('stream');
 const { promisify } = require('util');
 const streamPipeline = promisify(pipeline);
-
-require("./plugins/terminalLogInfo");
 
 console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', path.dirname(process.cwd()));
 console.log("[DEBUG_LOG] - Iniciando sistemas...");

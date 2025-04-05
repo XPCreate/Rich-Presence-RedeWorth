@@ -11,8 +11,8 @@ const presence = {
         instance: true,
         buttons: [
             { label: '🔴 Conectar', url: 'minecraft://redeworth.com:25565' },
-            { label: 'Discord', url: 'https://discord.gg/ezphhH9BKj' },
-            { label: 'Loja', url: 'https://loja.redeworth.com'}
+            { label: 'Discord', url: 'https://discord.gg/ezphhH9BKj' } //,
+            // { label: 'Loja', url: 'https://loja.redeworth.com'}
         ],
     },
 };
