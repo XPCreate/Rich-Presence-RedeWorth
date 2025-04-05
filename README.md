@@ -1,16 +1,12 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)  
 
-# 🎮 Atividade RedeWorth `v2.0.4`  
+# 🎮 Atividade RedeWorth `v2.0.5`
 ### 🚀 Exclusivo para divulgação da RedeWorth  
 
 ## 📌 Novidades e Melhorias  
 
 ### 🔹Aplicativo
-- Sistema de botões corrigido!
-- Sistema de atualizações automaticas corrigido!
-- Função da Rich Presence arrumado!
-
----
+- Implementamos algumas correções para o sistema de atualizações automaticas.
 
 ![image](https://i.imgur.com/1FMpvLt.png)  
 
@@ -25,9 +21,7 @@
 
 ✅ **Tudo pronto!** O Rich Presence estará funcionando perfeitamente.  
 
----
-
 ## 🎉 Agradecimentos Especiais  
-⌨️ `vitorxp` – Desenvolvedor
-💻 `gabsil_` – Design da interface do app
-🔍 `ShimizuMimi` – Testes e correção de bugs
+ - ⌨️ `vitorxp` – Desenvolvedor
+ - 💻 `gabsil_` – Design da interface do app
+ - 🔍 `ShimizuMimi` – Testes e correção de bugs
