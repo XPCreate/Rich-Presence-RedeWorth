@@ -30,7 +30,7 @@ async function verificarAtualizarVersao() {
       console.log('\x1b[0;32m[💎] Você já está na versão mais recente.\x1b[0m');
     }
   } catch (error) {
-    console.error('\x1b[0;31m[❌] Não foi possível verificar a versão mais recente.\x1b[0m');
+    console.log('\x1b[0;31m[❌] Não foi possível verificar a versão mais recente.\x1b[0m');
   }
 }
 
@@ -52,32 +52,29 @@ async function exibirBanner() {
   setTimeout(() => {
     const fs = require('fs');
     const path = require('path');
-    const projetoPath = path.join(__dirname, '../package.json');
-    const stats = fs.statSync(projetoPath);
+  
+    const pastaProjeto = path.join(__dirname, '..');
+    const stats = fs.statSync(pastaProjeto);
     const dataModificacao = new Date(stats.mtime);
-
+  
     const formatarData = (data) => {
       const dia = String(data.getDate()).padStart(2, '0');
       const mes = String(data.getMonth() + 1).padStart(2, '0');
       const ano = data.getFullYear();
       return `${dia}/${mes}/${ano}`;
     };
-
+  
     console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Modificado em: ${formatarData(dataModificacao)}`, largura)}\x1b[0m`);
-  }, 160)
+  }, 160);
+  
   setTimeout(() => { console.log(`\x1b[0;37m---------------------------------------------------------------\x1b[0m\n`); }, 180)
-}
-
-function customLog(pergunta, callback) {
-  process.stdout.write(pergunta);
-  process.stdin.once('data', data => callback(data.toString().trim()));
 }
 
 async function iniciarRPC() {
   try {
     DiscordRPC.register(CLIENT_ID);
     RPC.login({ clientId: CLIENT_ID })
-      .then(async () => {
+      .then(async () => { 
         discordIsNotLog = false;
       })
       .catch(async err => {
@@ -90,7 +87,7 @@ async function iniciarRPC() {
     RPC.on('ready', async () => {
       console.log('Atividade personalizada ativada!');
       await atualizarAtividade();
-      setInterval(atualizarAtividade, 15000);
+      setInterval(atualizarAtividade, 25000);
     });
 
     RPC.on("disconnected", async () => {

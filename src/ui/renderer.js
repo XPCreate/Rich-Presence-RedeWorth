@@ -15,16 +15,30 @@ let dsaf34r = document.getElementById("editTimeActivitiesProfile").value;
 const formatTimeDifference = (timestamp) => {
     let diff = Date.now() - timestamp;
     const units = [
-        { label: 'd', value: 1000 * 60 * 60 * 24 },
-        { label: 'h', value: 1000 * 60 * 60 },
-        { label: 'm', value: 1000 * 60 },
-        { label: 's', value: 1000 }
+        {
+            label: 'd',
+            value: 1000 * 60 * 60 * 24
+        },
+        {
+            label: 'h',
+            value: 1000 * 60 * 60
+        },
+        {
+            label: 'm',
+            value: 1000 * 60
+        },
+        {
+            label: 's',
+            value: 1000
+        }
     ];
 
     return units.map(({ label, value }) => {
         const amount = Math.floor(diff / value);
         diff %= value;
-        return amount > 0 ? `${amount}${label} ` : '';
+        return amount > 0
+            ? `${amount}${label} `
+            : '';
     }).join('').trim();
 };
 
@@ -67,16 +81,16 @@ const handleRPCAction = (action) => {
     toggleElementsDisplay(elements, "none");
 
     if (action === 'start' || action === 'reload') {
-        ; showError("Iniciada com sucesso!");
+        showError("Iniciada com sucesso!");
         document.getElementById('startRPC').disabled = true;
     }
     if (action === 'reload') {
-        ; showError("Reiniciada com sucesso!");
+        showError("Reiniciada com sucesso!");
         document.getElementById('reloadRPC').disabled = true;
         document.getElementById('stopRPC').disabled = true;
     }
     if (action === 'stop') {
-        ; showError("Parada com sucesso!");
+        showError("Parada com sucesso!");
         document.getElementById('reloadRPC').disabled = true;
         document.getElementById('stopRPC').disabled = true;
         document.getElementById('startRPC').disabled = false;
@@ -118,7 +132,7 @@ const updateServerInfo = async () => {
         const response = await fetch('https://api.mcsrvstat.us/3/redeworth.com');
         const data = response.ok ? await response.json() : { players: { online: 0 } };
         document.getElementById("statusServer").textContent = data.players.online ? `🟢 Status: Online` : `🔴 Status: Offline`;
-        document.getElementById("playersServer").textContent = `Jogadores Online: ${data.players.online / 2}`;
+        document.getElementById("playersServer").textContent = `Jogadores Online: ${Math.floor(data.players.online).toPrecision()}`;
     } catch (error) {
         document.getElementById("statusServer").textContent = `🔴 Status: Offline`;
         document.getElementById("playersServer").textContent = `Jogadores Online: 0`;
@@ -215,16 +229,34 @@ document.getElementById('closeConfigApp').addEventListener('click', () => {
     toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "none");
 });
 
-document.getElementById("minimizeToTray").addEventListener("click", function () {
-    var minimizeToTray = document.getElementById('minimizeToTray').checked;
+document.getElementById('closeConfig').addEventListener('click', () => {
+    csfg = false
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "none");
+});
 
-    ipcRenderer.send(`configApp`, {
-        minimizeToTray
-    });
+
+document.getElementById("minimizeToTray").addEventListener("click", function () {
+    systemUpdateConfigApp();
+});
+
+document.getElementById("runAppToMin").addEventListener("click", function () {
+    systemUpdateConfigApp();
+});
+
+document.getElementById("closeAppGameInt").addEventListener("click", function () {
+    systemUpdateConfigApp();
+});
+
+document.getElementById("pixelFormatApp1").addEventListener("keyup", function () {
+    systemUpdateConfigApp();
+});
+
+document.getElementById("pixelFormatApp2").addEventListener("keyup", function () {
+    systemUpdateConfigApp();
 });
 
 document.getElementById("editTimeActivitiesProfile").addEventListener("change", function () {
-    if(dsaf34r !== document.getElementById("editTimeActivitiesProfile").value) {
+    if (dsaf34r !== document.getElementById("editTimeActivitiesProfile").value) {
         document.getElementById("showActivitiesReal").checked = false
         ipcRenderer.send(`config`, {
             showActivitiesReal: false,
@@ -258,10 +290,53 @@ document.getElementById("showActivitiesReal").addEventListener("click", function
     }).replace(',', '');
 })
 
+document.getElementById("openConfigRich").addEventListener("click", (event) => {
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d3"), "none");
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "flex");
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d32"), "none");
+})
+
+document.getElementById("AppStartRich").addEventListener("click", () => {
+    systemUpdateConfigApp();
+})
+
+function systemUpdateConfigApp() {
+    var runAppToMin = document.getElementById('runAppToMin').checked;
+    var minimizeToTray = document.getElementById('minimizeToTray').checked;
+    var closeAppGameInt = document.getElementById('closeAppGameInt').checked;
+    var pixelFormatApp1 = document.getElementById('pixelFormatApp1').value;
+    var pixelFormatApp2 = document.getElementById('pixelFormatApp2').value;
+    var AppStartRich = document.getElementById("AppStartRich").checked;
+
+    ipcRenderer.send(`configApp`, {
+        minimizeToTray,
+        runAppToMin,
+        closeAppGameInt,
+        pixelFormatApp1,
+        pixelFormatApp2,
+        AppStartRich
+    });
+}
+
 function showClientConfig() {
     csfg = true;
     document.getElementById("editNick").value = nickname;
     toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "flex");
+}
+
+function btnConfigAppCategory(element) {    
+    var value = element.name;
+    document.getElementById("vhu3d").value = "false";
+    document.getElementById("vhu3df").value = "false";
+    element.value = "true"
+
+    if (value === "app") {
+        document.getElementById("abv2").style.display = "none";
+        document.getElementById("abv1").style.display = "block";
+    } else {
+        document.getElementById("abv1").style.display = "none";
+        document.getElementById("abv2").style.display = "block";
+    }
 }
 
 ipcRenderer.on('terminal-output', (event, data) => {
@@ -278,6 +353,15 @@ ipcRenderer.on('terminal-output', (event, data) => {
     const color = Object.keys(colors).find(key => data.includes(key)) || "#ffffff";
     terminalDiv.innerHTML += `<p style="color: ${colors[color]}">${String(data).replace(/\x1B\[[0-9;]*[mK]/g, '')}</p>`;
     terminalDiv.scrollTop = terminalDiv.scrollHeight;
+
+    if (String(data).includes("Atividade desativada com sucesso.")) {
+        document.getElementById('reloadRPC').disabled = true;
+        document.getElementById('stopRPC').disabled = true;
+        document.getElementById('startRPC').disabled = false;
+        dateOnActivities = 0;
+        dateReloadStatus = 0;
+        dateOnActivitieMinecraft = 0;
+    }
 });
 
 ipcRenderer.on('versionAPP', (event, data) => {
@@ -298,9 +382,9 @@ ipcRenderer.on('startRPC', (event, data) => {
     }
 
     startRPC = data.timeStart;
-    console.log(data, startRPC);
     document.getElementById('reloadRPC').disabled = false;
     document.getElementById('stopRPC').disabled = false;
+    document.getElementById('startRPC').disabled = true;
     dateOnActivities = Date.now() - 1000;
 
     let currentDate = new Date();
@@ -370,8 +454,18 @@ ipcRenderer.on('configApp', (event, data) => {
     if (csfg === true) return;
 
     var minimizeToTray = document.getElementById('minimizeToTray').checked;
+    var runAppToMin = document.getElementById('runAppToMin').checked;
+    var closeAppGameInt = document.getElementById('closeAppGameInt').checked;
+    var AppStartRich = document.getElementById('AppStartRich').checked;
+    var pixelFormatApp1 = document.getElementById('pixelFormatApp1').value;
+    var pixelFormatApp2 = document.getElementById('pixelFormatApp2').value;
 
     if (minimizeToTray !== data.minimizeToTray) document.getElementById('minimizeToTray').checked = data.minimizeToTray;
+    if (runAppToMin !== data.runAppToMin) document.getElementById('runAppToMin').checked = data.runAppToMin;
+    if (closeAppGameInt !== data.closeAppGameInt) document.getElementById('closeAppGameInt').checked = data.closeAppGameInt;
+    if (AppStartRich !== data.AppStartRich) document.getElementById('AppStartRich').checked = data.AppStartRich;
+    if (pixelFormatApp1 !== data.pixelFormatApp1) document.getElementById('pixelFormatApp1').value = data.pixelFormatApp1;
+    if (pixelFormatApp2 !== data.pixelFormatApp2) document.getElementById('pixelFormatApp2').value = data.pixelFormatApp2;
 })
 
 setInterval(() => {
@@ -397,7 +491,7 @@ setInterval(() => {
 }, 1000);
 
 setTimeout(updateServerInfo, 1000);
-setInterval(updateServerInfo, 10000);
+setInterval(updateServerInfo, 15000);
 setTimeout(checkForUpdates, 1900);
 setInterval(checkForUpdates, 30000);
 
@@ -411,13 +505,13 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.getElementById("minimize-btn").addEventListener("click", () => {
-  ipcRenderer.send("minimize-window");
+    ipcRenderer.send("minimize-window");
 });
 
 document.getElementById("maximize-btn").addEventListener("click", () => {
-  ipcRenderer.send("maximize-window");
+    ipcRenderer.send("maximize-window");
 });
 
 document.getElementById("close-btn").addEventListener("click", () => {
-  ipcRenderer.send("close-window");
+    ipcRenderer.send("close-window");
 });

@@ -1,8 +1,8 @@
 {
   "name": "rich-presence-redeworth",
   "productName": "Discord Rich Presence Rede Worth",
-  "version": "2.0.5",
-  "description": "Status personalizado do Discord, para fins de divulgação do servidor Rede Worth.",
+  "version": "2.0.6",
+  "description": "Status personalizado do Discord, para fins de divulgação do servidor redeworth.com.",
   "main": "src/LauncherRichPresence.js",
   "bin": "src/LauncherRichPresence.js",
   "scripts": {
@@ -64,12 +64,22 @@
     "redeworth-rp-bot-discord-rp-vitorxp-rich-presence"
   ],
   "author": "vitorxp",
+  "contributors": [
+    "vitorxp <vitorxp@gmail.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.5.16",
+    "axios": "^1.8.4",
     "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "discord-oauth2": "^2.12.1",
     "discord-rpc": "^4.0.1",
+    "electron-store": "^8.2.0",
+    "express": "^5.1.0",
+    "open": "^8.4.2",
     "ps-list": "^8.1.1",
+    "readline": "^1.3.0",
     "rich-presence-redeworth": "file:"
   },
   "pkg": {
@@ -86,13 +96,24 @@
   },
   "devDependencies": {
     "@types/discord-rpc": "^4.0.8",
-    "electron": "^34.3.0",
+    "electron": "^34.5.3",
     "electron-builder": "^26.0.12"
   },
   "homepage": "https://github.com/XPCreate/Rich-Presence-RedeWorth#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/XPCreate/Rich-Presence-RedeWorth.git"
+  },
+  "release": {
+    "tagFormat": "v${version}",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/git",
+      "@semantic-release/npm"
+    ],
+    "repositoryUrl": "https://github.com/XPCreate/Rich-Presence-RedeWorth/release"
   },
   "bugs": {
     "url": "https://github.com/XPCreate/Rich-Presence-RedeWorth/issues"

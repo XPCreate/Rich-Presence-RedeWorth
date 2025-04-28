@@ -11,8 +11,7 @@ const presence = {
         instance: true,
         buttons: [
             { label: '🔴 Conectar', url: 'minecraft://redeworth.com:25565' },
-            { label: 'Discord', url: 'https://discord.gg/ezphhH9BKj' } //,
-            // { label: 'Loja', url: 'https://loja.redeworth.com'}
+            { label: 'Discord', url: 'https://discord.gg/ezphhH9BKj' }
         ],
     },
 };
@@ -97,7 +96,7 @@ module.exports.presence = async (nick, configData) => {
         presence.config.buttons[0].label = data.motd?.clean[0]?.includes('Estamos em manutenção!') ? '🟡 Conectar' :
             data.motd ? '🟢 Conectar' : '🔴 Conectar';
 
-        presence.config.partySize = configData.showPlayers ? Math.floor(data.players.online / 2) || 0 : 0;
+        presence.config.partySize = configData.showPlayers ? Math.floor(data.players.online) || 0 : 0;
         presence.config.partyMax = configData.showPlayers ? (data.players.online ? data.players.max : 0) : 0;
 
         presence.config.smallImageKey = [
@@ -108,7 +107,7 @@ module.exports.presence = async (nick, configData) => {
 
         return presence.config;
     } catch (err) {
-        console.error(`[ERROR] - ${err.message} (tentando novamente em 15s)`);
+        console.error(`[ERROR] - ${err.message} (tentando novamente em 25s)`);
         return presence.config;
     }
 };

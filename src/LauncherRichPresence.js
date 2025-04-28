@@ -3,6 +3,7 @@ require("./plugins/terminalLogInfo");
 const fs = require('fs');
 const path = require('path');
 const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
+const Store = require("electron-store");
 const { spawn } = require('child_process');
 const peq = require('../package.json');
 const config = require('./configFile');
@@ -16,39 +17,84 @@ console.log("[DEBUG_LOG] - Iniciando sistemas...");
 
 let mainWindow, rpcProcess, splashWindow, tray, timeStart;
 let nickname = db.rich.get("configRichPresence/nickname") ?? "";
-let tryAgain = false;
 let noAgain = db.get("config/minimizeToTray") === false;
+let tryAgain = false;
+var d3 = ""
 
 const formatText = text => text.replace(/\n/g, '<br>');
 const formatTextc = text => text.replace(/\n/g, '');
 
 const createTray = () => {
   console.log("[DEBUG_LOG] - Criando ícone da bandeja...");
-  tray = new Tray(path.join(__dirname, "./ui/image/749a8e803f7abea1f44bce4832b18d75.png"));
+  tray = new Tray(path.join(__dirname, "./ui/image/imageicon.png"));
   tray.setToolTip("Discord Rich Presence RedeWorth");
-  tray.on("click", () => mainWindow.show());
+  // tray.on("click", () => mainWindow.show());
+  tray.on('double-click', () => {
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
+  });
   updateTrayMenu("stop");
 };
 
 const updateTrayMenu = state => {
+  d3 = state
   const trayMenu = Menu.buildFromTemplate([
-    { label: "Verificar Atualização", click: () => restartApp() },
-    { label: "Mostrar Painel", click: () => mainWindow.show() },
-    { label: "Iniciar Rich Presence", click: () => startRPCProcess(nickname), enabled: state !== "run" },
-    { label: "Reiniciar Rich Presence", click: () => restartRPCProcess() },
-    { label: "Parar Rich Presence", click: stopRPCProcess, enabled: state !== "stop" },
-    { label: "Fechar Rich Presence", click: () => { tryAgain = true; app.quit(); } }
+    {
+      label: "Verificar Atualização",
+      click: () => {
+        restartApp();
+        db.update("config/reloadStartRichPresence", true);
+      }
+    },
+    {
+      label: "Iniciar Atividade",
+      click: () => startRPCProcess(nickname),
+      enabled: state !== "run"
+    },
+    {
+      label: "Reiniciar Atividade", click: () => {
+        stopRPCProcess();
+        setTimeout(() => startRPCProcess(nickname), 100);
+      }
+    },
+    {
+      label: "Parar Atividade",
+      click: () => stopRPCProcess(),
+      enabled: state !== "stop"
+    },
+    {
+      label: mainWindow.isVisible() ? "Esconder Aplicativo" : "Mostrar Aplicativo",
+      click: () => {
+        if (mainWindow.isVisible()) {
+          mainWindow.hide();
+        } else {
+          mainWindow.show();
+        }
+        updateTrayMenu(d3);
+      }
+    },
+    {
+      label: "Fechar Aplicativo",
+      click: () => {
+        tryAgain = true;
+        app.quit();
+      }
+    }
   ]);
+
   tray.setContextMenu(trayMenu);
 };
 
 const createMainWindow = () => {
   console.log('[DEBUG_LOG] - Inicializando janela principal.');
   mainWindow = new BrowserWindow({
-    width: 950,
-    height: 600,
+    width: Number(db.get("config/pixelFormatApp1")) ?? 950,
+    height: Number(db.get("config/pixelFormatApp2")) ?? 600,
     title: 'Discord Rich Presence RedeWorth',
-    icon: path.join(__dirname, "./ui/image/749a8e803f7abea1f44bce4832b18d75.png"),
+    icon: path.join(__dirname, "./ui/image/imageicon.png"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -58,8 +104,55 @@ const createMainWindow = () => {
 
   if (config.environment === "Production") Menu.setApplicationMenu(Menu.buildFromTemplate([]));
 
+  mainWindow.webContents.on('context-menu', (e, params) => {
+    const template = [
+      {
+        label: 'Verificar Atualização',
+        click: () => {
+          restartApp();
+          db.update("config/reloadStartRichPresence", true);
+        }
+      },
+      { type: 'separator' },
+      {
+        label: 'Minimizar',
+        click: () => {
+          mainWindow.minimize();
+        }
+      },
+      {
+        label: 'Maximizar',
+        click: () => {
+          if (mainWindow.isMaximized()) {
+            mainWindow.unmaximize();
+          } else {
+            mainWindow.maximize();
+          }
+        }
+      },
+      {
+        label: 'Esconder Aplicativo',
+        click: () => {
+          mainWindow.hide();
+        }
+      },
+      {
+        label: "Fechar Aplicativo",
+        click: () => {
+          tryAgain = true;
+          app.quit();
+        }
+      }
+    ];
+
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup({ window: mainWindow });
+  });
+
   mainWindow.loadFile('ui/index.html');
   mainWindow.setTitle("Discord Rich Presence RedeWorth");
+
+  if (db.get("config/runAppToMin") === true) mainWindow.hide();
 
   setInterval(() => {
     if (!mainWindow.isDestroyed()) {
@@ -92,6 +185,7 @@ const createMainWindow = () => {
       event.preventDefault();
       mainWindow.hide();
       console.log("[DEBUG_LOG] - Janela minimizada para a bandeja.");
+      updateTrayMenu(d3);
     } else {
       console.log('[DEBUG_LOG] - Saindo da aplicação.');
     }
@@ -100,9 +194,10 @@ const createMainWindow = () => {
 
 const createSplashWindow = () => {
   splashWindow = new BrowserWindow({
-    width: 950,
-    height: 600,
+    width: 350,
+    height: 450,
     frame: false,
+    icon: path.join(__dirname, "./ui/image/imageicon.png"),
     alwaysOnTop: true,
     resizable: false,
     webPreferences: {
@@ -137,7 +232,10 @@ const startRPCProcess = nick => {
   rpcProcess?.kill();
 
   rpcProcess = spawn('node', ['src/RichPresence.js'], {
-    env: { ...process.env, NICKNAME: nick },
+    env: {
+      ...process.env,
+      NICKNAME: nick
+    },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
 
@@ -163,7 +261,13 @@ const stopRPCProcess = () => {
 const handleRPCProcessOutput = data => {
   const output = data.toString();
   if (output.includes("[DEBUG] - Minecraft foi aberto!")) mainWindow.webContents.send('activities-minecraft', Date.now());
-  if (output.includes("[DEBUG] - Minecraft foi fechado!")) mainWindow.webContents.send('activities-minecraft', 0);
+  if (output.includes("[DEBUG] - Minecraft foi fechado!")) {
+    mainWindow.webContents.send('activities-minecraft', 0);
+    if (db.get("config/closeAppGameInt") === true) {
+      tryAgain = true;
+      app.quit();
+    }
+  };
   if (output.includes("[DEBUG] - Discord desconectado")) setTimeout(() => restartRPCProcess(), 5000);
   if (output.includes("[DEBUG] - Atividade personalizada ativada!")) {
     mainWindow.webContents.send('activities-reload-time-active', 15);
@@ -195,11 +299,18 @@ ipcMain.on('config', (event, data) => {
 ipcMain.on("firstUpdate", (event, data) => {
   createMainWindow();
   createTray();
+  setTimeout(() => {
+    if (db.get("config/reloadStartRichPresence") === true || db.get("config/AppStartRich") === true) {
+      db.update("config/reloadStartRichPresence", false);
+      startRPCProcess(nickname);
+    }
+  }, 1000)
   splashWindow.close();
 })
 
-ipcMain.on("updateVersionApp", async(event, data) => {
+ipcMain.on("updateVersionApp", async (event, data) => {
   restartApp();
+  db.update("config/reloadStartRichPresence", true);
 })
 
 ipcMain.on("updateVerify", async (event, data2) => {
@@ -228,7 +339,7 @@ ipcMain.on("updateVerify", async (event, data2) => {
     zipUrl = data.assets[0]?.browser_download_url;
   }
 
-  if(!zipUrl) return splashWindow.webContents.send("firstUpdate", false);
+  if (!zipUrl) return splashWindow.webContents.send("firstUpdate", false);
 
   splashWindow.webContents.send("yepUpdate", true);
 
@@ -304,11 +415,13 @@ ipcMain.on("updateVerify", async (event, data2) => {
     }
   }
 
-  setTimeout(async () => {await downloadAndExtract()}, 500)
+  setTimeout(async () => {
+    await downloadAndExtract()
+  }, 500)
 });
 
 ipcMain.on('configApp', (event, data) => {
-  db.set("config", data);
+  db.update("config", data);
   noAgain = data.minimizeToTray === false;
 });
 

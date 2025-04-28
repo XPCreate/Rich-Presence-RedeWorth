@@ -240,12 +240,107 @@
             }
         }
     </style>
+
+    <style>
+        .loader4 {
+            margin-top: 5px;
+            display: block;
+            position: relative;
+            height: 8px;
+            width: 80%;
+            border: 1px solid #00304b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .loader4::after {
+            content: '';
+            width: 40%;
+            height: 100%;
+            background: #0518447a;
+            ;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            animation: animloader 1.5s linear infinite;
+        }
+
+        .loader5 {
+            margin-top: 5px;
+            display: block;
+            position: relative;
+            height: 8px;
+            width: 80%;
+            border: 1px solid #00304b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .loader5::after {
+            content: '';
+            width: var(--after-size, 0px);
+            height: 100%;
+            background: #0518447a;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            animation: animloader2 3s linear infinite;
+        }
+
+        @keyframes animloader {
+            0% {
+                left: 0;
+                transform: translateX(-100%);
+            }
+
+            50% {
+                background-color: #062877b2;
+            }
+
+            100% {
+                background-color: #002b8fdc;
+                left: 100%;
+                transform: translateX(0%);
+            }
+        }
+
+        @keyframes animloader2 {
+            0% {
+                background-color: #072364b2;
+            }
+
+            25% {
+                background-color: #002b8f;
+            }
+
+            50% {
+                background-color: #072364b2;
+            }
+
+            75% {
+                background-color: #002b8f;
+            }
+
+            100% {
+                background-color: #072364b2;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="wedfr">
-        <span id="title">Aguarde...</span>
-        <span class="loader"></span>
+        <div style="background-image: url(./image/imageicon.png);background-repeat: no-repeat;width: 64px;height: 64px;" alt="Logo"></div>
+        <span id="title"></span>
+        <div style="display: flex;flex-direction: column;width: -webkit-fill-available;align-items: center;"
+            id="loadingPQ">
+            <!-- <element class="loader"></element> -->
+            <!-- <element class="loader4"></element>
+            <element class="loader5" style="--after-size: 0%;"></element> -->
+        </div>
+
     </div>
 
     <script>
@@ -253,16 +348,20 @@
             const { ipcRenderer } = require('electron');
 
             ipcRenderer.send(`updateVerify`, {})
-
-            document.getElementById("title").innerHTML = "Pesquisando atualizações..."
+            
+            document.getElementById("title").style.marginTop = "20px"
+            document.getElementById("title").innerHTML = `Pesquisando atualizações...`
+            document.getElementById("loadingPQ").innerHTML = `<element class="loader"></element>`
 
             ipcRenderer.on("yepUpdate", (event, data) => {
                 document.getElementById("title").innerHTML = "Achamos uma atualização pendente, baixando..."
+                document.getElementById("loadingPQ").innerHTML = `<element class="loader"></element>`
             })
 
             ipcRenderer.on('firstUpdate', (event, data) => {
                 if (data === true) {
                     document.getElementById("title").innerHTML = "Atualização bem sucedida!"
+                    document.getElementById("loadingPQ").innerHTML = `<element class="loader"></element>`
                     setTimeout(() => {
                         document.getElementById("title").innerHTML = "Iniciando Aplicação..."
                         setTimeout(() => {
@@ -271,6 +370,7 @@
                     }, 500)
                 } else {
                     document.getElementById("title").innerHTML = "Sem atualizações!"
+                    document.getElementById("loadingPQ").innerHTML = `<element class="loader"></element>`
                     setTimeout(() => {
                         document.getElementById("title").innerHTML = "Iniciando Aplicação..."
                         setTimeout(() => {
@@ -282,12 +382,14 @@
 
             ipcRenderer.on("outputPercentUpdate", (event, data) => {
                 document.getElementById("title").innerHTML = "Baixando... <br> " + data + "%";
+                document.getElementById("loadingPQ").innerHTML = `<element class="loader5" style="--after-size: ${data}%;"></element>`
             })
 
             ipcRenderer.on("outputPercentExtractedFiles", (event, data) => {
                 document.getElementById("title").innerHTML = "Extraindo... <br> " + data + "%";
+                document.getElementById("loadingPQ").innerHTML = `<element class="loader5" style="--after-size: ${data}%;"></element>`
             })
-        }, 500)
+        }, 1500)
     </script>
 </body>
 
