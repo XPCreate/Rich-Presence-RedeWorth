@@ -91,8 +91,8 @@ const updateTrayMenu = state => {
 const createMainWindow = () => {
   console.log('[DEBUG_LOG] - Inicializando janela principal.');
   mainWindow = new BrowserWindow({
-    width: Number(db.get("config/pixelFormatApp1")) ?? 950,
-    height: Number(db.get("config/pixelFormatApp2")) ?? 600,
+    width: db.get("config/pixelFormatApp1") ? Number(db.get("config/pixelFormatApp1")) : 950,
+    height: db.get("config/pixelFormatApp2") ? Number(db.get("config/pixelFormatApp2")) : 600,
     title: 'Discord Rich Presence RedeWorth',
     icon: path.join(__dirname, "./ui/image/imageicon.png"),
     webPreferences: {
